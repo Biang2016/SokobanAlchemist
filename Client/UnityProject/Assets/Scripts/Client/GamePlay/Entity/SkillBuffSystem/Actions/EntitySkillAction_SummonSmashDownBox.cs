@@ -29,7 +29,10 @@ public class EntitySkillAction_SummonSmashDownBox : EntitySkillAction, EntitySki
             ushort boxTypeIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, randomResult.BoxTypeName.TypeName);
             if (boxTypeIndex != 0)
             {
-                if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(boxTypeIndex, randomResult.BoxOrientation, GridPos3D.Down, worldGP + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
+                EntityData entityData = new EntityData(boxTypeIndex, randomResult.BoxOrientation);
+                entityData.InitStaticLayoutGUID = Entity.CurrentEntityData.InitStaticLayoutGUID;
+                entityData.InitWorldModuleGUID = Entity.CurrentEntityData.InitWorldModuleGUID;
+                if (WorldManager.Instance.CurrentWorld.DropBoxOnTopLayer(entityData, GridPos3D.Down, worldGP + GridPos3D.Up * DropFromHeightFromFloor, DropFromHeightFromFloor + 3, out Box dropBox))
                 {
                     dropBox.LastInteractEntity = Entity;
                 }

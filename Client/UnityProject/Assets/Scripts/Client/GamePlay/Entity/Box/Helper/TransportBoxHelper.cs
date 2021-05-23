@@ -34,19 +34,19 @@ public class TransportBoxHelper : BoxMonoHelper
         Open = true;
     }
 
-    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
-        if (entityDataExtraStates.R_TransportBoxClosed)
+        base.ApplyEntityExtraSerializeData(entityExtraSerializeData);
+        if (entityExtraSerializeData.EntityDataExtraStates.R_TransportBoxClosed)
         {
-            Open = !entityDataExtraStates.TransportBoxClosed;
+            Open = !entityExtraSerializeData.EntityDataExtraStates.TransportBoxClosed;
         }
     }
 
-    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        entityDataExtraStates.R_TransportBoxClosed = true;
-        entityDataExtraStates.TransportBoxClosed = !Open;
+        base.RecordEntityExtraSerializeData(entityExtraSerializeData);
+        entityExtraSerializeData.EntityDataExtraStates.R_TransportBoxClosed = true;
+        entityExtraSerializeData.EntityDataExtraStates.TransportBoxClosed = !Open;
     }
 }

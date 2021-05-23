@@ -18,6 +18,10 @@ public class EntityData : IClone<EntityData>
     [HideInEditorMode]
     public string InitStaticLayoutGUID = ""; // 创建时所属的静态布局GUID
 
+    [ReadOnly]
+    [HideInEditorMode]
+    public string InitWorldModuleGUID = ""; // 创建时所属的模组GUID
+
     public override string ToString()
     {
         return EntityType.ToString();
@@ -150,6 +154,7 @@ public class EntityData : IClone<EntityData>
         newEntityData.WorldGP = WorldGP;
         newEntityData.LocalGP = LocalGP;
         newEntityData.InitStaticLayoutGUID = InitStaticLayoutGUID;
+        newEntityData.InitWorldModuleGUID = InitWorldModuleGUID;
         return newEntityData;
     }
 }

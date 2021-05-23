@@ -30,16 +30,16 @@ public class BoxArtHelper : EntityArtHelper
         base.OnHelperUsed();
     }
 
-    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
+        base.ApplyEntityExtraSerializeData(entityExtraSerializeData);
         if (UseModelVariants)
         {
-            if (entityDataExtraStates.R_ModelIndex)
+            if (entityExtraSerializeData.EntityDataExtraStates.R_ModelIndex)
             {
                 for (int i = 0; i < ModelVariants.Count; i++)
                 {
-                    ModelVariants[i].GameObject.SetActive(i == entityDataExtraStates.ModelIndex);
+                    ModelVariants[i].GameObject.SetActive(i == entityExtraSerializeData.EntityDataExtraStates.ModelIndex);
                 }
             }
             else
@@ -72,9 +72,9 @@ public class BoxArtHelper : EntityArtHelper
 
         if (UseRandomScale)
         {
-            if (entityDataExtraStates.R_ModelScale)
+            if (entityExtraSerializeData.EntityDataExtraStates.R_ModelScale)
             {
-                Pivot.localScale = entityDataExtraStates.ModelScale;
+                Pivot.localScale = entityExtraSerializeData.EntityDataExtraStates.ModelScale;
             }
             else
             {
@@ -84,9 +84,9 @@ public class BoxArtHelper : EntityArtHelper
 
         if (UseRandomOrientation)
         {
-            if (entityDataExtraStates.R_ModelRotation)
+            if (entityExtraSerializeData.EntityDataExtraStates.R_ModelRotation)
             {
-                Pivot.localRotation = entityDataExtraStates.ModelRotation;
+                Pivot.localRotation = entityExtraSerializeData.EntityDataExtraStates.ModelRotation;
             }
             else
             {
@@ -95,28 +95,28 @@ public class BoxArtHelper : EntityArtHelper
         }
     }
 
-    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.RecordEntityExtraStates(entityDataExtraStates);
+        base.RecordEntityExtraSerializeData(entityExtraSerializeData);
         if (UseModelVariants)
         {
-            entityDataExtraStates.R_ModelIndex = true;
-            entityDataExtraStates.ModelIndex = ModelIndex;
+            entityExtraSerializeData.EntityDataExtraStates.R_ModelIndex = true;
+            entityExtraSerializeData.EntityDataExtraStates.ModelIndex = ModelIndex;
 
-            entityDataExtraStates.R_DecoratorIndex = ShowDecoration;
-            if (ShowDecoration) entityDataExtraStates.DecoratorIndex = DecorationIndex;
+            entityExtraSerializeData.EntityDataExtraStates.R_DecoratorIndex = ShowDecoration;
+            if (ShowDecoration) entityExtraSerializeData.EntityDataExtraStates.DecoratorIndex = DecorationIndex;
         }
 
         if (UseRandomScale)
         {
-            entityDataExtraStates.R_ModelScale = true;
-            entityDataExtraStates.ModelScale = Pivot.localScale;
+            entityExtraSerializeData.EntityDataExtraStates.R_ModelScale = true;
+            entityExtraSerializeData.EntityDataExtraStates.ModelScale = Pivot.localScale;
         }
 
         if (UseRandomOrientation)
         {
-            entityDataExtraStates.R_ModelRotation = true;
-            entityDataExtraStates.ModelRotation = Pivot.localRotation;
+            entityExtraSerializeData.EntityDataExtraStates.R_ModelRotation = true;
+            entityExtraSerializeData.EntityDataExtraStates.ModelRotation = Pivot.localRotation;
         }
     }
 

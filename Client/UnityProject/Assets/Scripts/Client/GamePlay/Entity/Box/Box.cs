@@ -85,7 +85,7 @@ public partial class Box : Entity
 
     protected override void Awake()
     {
-        EntityStatPropSet = new EntityStatPropSet();
+        base.Awake();
     }
 
     public override void OnUsed()
@@ -138,7 +138,7 @@ public partial class Box : Entity
 
         LastInteractEntity = null;
 
-        EntityStatPropSet.OnRecycled();
+        EntityStatPropSet.OnRecycle();
         MarkedAsMergedSourceBox = false;
 
         CurrentKickGlobalAxis = KickAxis.None;
@@ -400,9 +400,9 @@ public partial class Box : Entity
         }
     }
 
-    public void Setup(EntityData entityData, GridPos3D worldGP, string initWorldModuleGUID)
+    public void Setup(EntityData entityData, GridPos3D worldGP)
     {
-        base.Setup(entityData, initWorldModuleGUID);
+        base.Setup(entityData);
         transform.position = worldGP;
         WorldGP = worldGP;
         if (IsHidden) EntityModelHelper.gameObject.SetActive(false);

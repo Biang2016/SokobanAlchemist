@@ -14,21 +14,6 @@ using UnityEditor;
 
 public class WorldModule : PoolObject
 {
-    #region GUID
-
-    [ReadOnly]
-    [HideInEditorMode]
-    public string GUID;
-
-    private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.WorldModule;
-
-    protected uint GetGUID()
-    {
-        return guidGenerator++;
-    }
-
-    #endregion
-
     public const int MODULE_SIZE = 16;
     public World World;
 
@@ -45,7 +30,10 @@ public class WorldModule : PoolObject
     public WorldGroundCollider WorldGroundCollider;
 
     [ShowInInspector]
-    public Dictionary<uint, Entity> WorldModuleTriggerEntities = new Dictionary<uint, Entity>(); // 仅记录核心格在此模组内的TriggerEntity
+    public Dictionary<uint, Entity> WorldModuleTriggerEntities = new Dictionary<uint, Entity>(); // 所有占位格在此模组内的TriggerEntity
+
+    [ShowInInspector]
+    public Dictionary<uint, Entity> WorldModuleTriggerEntities_CoreGridInside = new Dictionary<uint, Entity>(); // 仅记录核心格在此模组内的TriggerEntity
 
     public List<CollectableItem> WorldModuleCollectableItems = new List<CollectableItem>();
 
@@ -101,40 +89,54 @@ public class WorldModule : PoolObject
                     if (!WorldModuleTriggerEntities.ContainsKey(value.GUID))
                     {
                         WorldModuleTriggerEntities.Add(value.GUID, value);
-                        if (!isStart)
+                        bool isCore = WorldGPToLocalGP(value.WorldGP) == localGP; // 只针对核心格纪录data信息
+                        if (isCore)
                         {
-                            if (WorldModuleData.TriggerEntityDataDict.TryGetValue(value.GUID, out EntityData triggerEntityData))
+                            WorldModuleTriggerEntities_CoreGridInside.Add(value.GUID, value);
+                            if (!isStart)
                             {
-                                triggerEntityData.LocalGP = localGP;
-                                triggerEntityData.WorldGP = LocalGPToWorldGP(localGP);
-                            }
-                            else
-                            {
-                                triggerEntityData = value.CurrentEntityData; // todo 记录箱子的extraSer
+                                EntityData triggerEntityData = value.CurrentEntityData;
                                 triggerEntityData.LocalGP = localGP;
                                 triggerEntityData.WorldGP = LocalGPToWorldGP(localGP);
                                 WorldModuleData.TriggerEntityDataDict.Add(value.GUID, triggerEntityData);
                                 WorldModuleData.TriggerEntityDataList.Add(triggerEntityData);
                             }
-                        }
-                        else
-                        {
-                            if (!WorldModuleData.TriggerEntityDataDict.ContainsKey(value.GUID))
+                            else
                             {
-                                WorldModuleData.TriggerEntityDataDict.Add(value.GUID, value.CurrentEntityData);
+                                if (!WorldModuleData.TriggerEntityDataDict.ContainsKey(value.GUID))
+                                {
+                                    WorldModuleData.TriggerEntityDataDict.Add(value.GUID, value.CurrentEntityData);
+                                }
                             }
+                        }
+                    }
+                    else
+                    {
+                        // 只针对核心格更新坐标
+                        bool isCore = WorldGPToLocalGP(value.WorldGP) == localGP;
+
+                        if (!isStart && isCore)
+                        {
+                            EntityData triggerEntityData = WorldModuleData.TriggerEntityDataDict[value.GUID];
+                            triggerEntityData.LocalGP = localGP;
+                            triggerEntityData.WorldGP = LocalGPToWorldGP(localGP);
                         }
                     }
                 }
                 else
                 {
                     WorldModuleTriggerEntities.Remove(triggerEntityGUID);
-                    if (!isStart)
+                    bool isCore = WorldModuleTriggerEntities_CoreGridInside.ContainsKey(triggerEntityGUID);
+                    if (isCore)
                     {
-                        if (WorldModuleData.TriggerEntityDataDict.TryGetValue(triggerEntityGUID, out EntityData triggerEntityData))
+                        WorldModuleTriggerEntities_CoreGridInside.Remove(triggerEntityGUID);
+                        if (!isStart)
                         {
-                            WorldModuleData.TriggerEntityDataDict.Remove(triggerEntityGUID);
-                            WorldModuleData.TriggerEntityDataList.Remove(triggerEntityData);
+                            if (WorldModuleData.TriggerEntityDataDict.TryGetValue(triggerEntityGUID, out EntityData triggerEntityData))
+                            {
+                                WorldModuleData.TriggerEntityDataDict.Remove(triggerEntityGUID);
+                                WorldModuleData.TriggerEntityDataList.Remove(triggerEntityData);
+                            }
                         }
                     }
                 }
@@ -152,7 +154,7 @@ public class WorldModule : PoolObject
                     {
                         if (!isPartial && !isStart) WorldModuleData[TypeDefineType.Box, localGP] = null;
                         Entity entityInOverlapMatrix = EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z];
-                        if (entityInOverlapMatrix != null && entityInOverlapMatrix is Box)
+                        if (entityInOverlapMatrix != null && entityInOverlapMatrix is Box box && !box.Passable)
                         {
                             EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
                         }
@@ -172,7 +174,7 @@ public class WorldModule : PoolObject
                                 }
                                 else
                                 {
-                                    WorldModuleData[TypeDefineType.Box, localGP] = value.CurrentEntityData; // todo 记录箱子的extraSer
+                                    WorldModuleData[TypeDefineType.Box, localGP] = value.CurrentEntityData;
                                 }
                             }
                             else
@@ -212,7 +214,7 @@ public class WorldModule : PoolObject
                                 }
                                 else
                                 {
-                                    WorldModuleData[TypeDefineType.Actor, localGP] = value.CurrentEntityData; // todo 记录箱子的extraSer
+                                    WorldModuleData[TypeDefineType.Actor, localGP] = value.CurrentEntityData;
                                 }
                             }
                             else
@@ -241,11 +243,6 @@ public class WorldModule : PoolObject
         return null;
     }
 
-    public void SetActorOccupation(GridPos3D localGP, Actor actor)
-    {
-        EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = actor;
-    }
-
     #region Roots
 
     internal Transform WorldModuleBoxRoot;
@@ -268,7 +265,10 @@ public class WorldModule : PoolObject
     }
 
     [HideInEditorMode]
-    public bool IsGeneratingOrRecycling;
+    internal bool IsGeneratingOrRecycling;
+
+    [HideInEditorMode]
+    internal bool IsIniting = false;
 
     public IEnumerator Clear(bool releaseWorldModuleData, int clearEntityNumPerFrame = 256)
     {
@@ -281,12 +281,14 @@ public class WorldModule : PoolObject
         }
 
         EventTriggerAppearEntityPassiveSkillList.Clear();
-        foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities)
+        foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities_CoreGridInside)
         {
             kv.Value.DestroySelfByModuleRecycle();
         }
 
+        WorldModuleTriggerEntities_CoreGridInside.Clear();
         WorldModuleTriggerEntities.Clear();
+
         foreach (CollectableItem ci in WorldModuleCollectableItems)
         {
             ci.PoolRecycle();
@@ -318,6 +320,11 @@ public class WorldModule : PoolObject
                                         module.EntityMatrix_CheckOverlap_BoxAndActor[localGP.x, localGP.y, localGP.z] = null;
                                     }
                                 }
+                            }
+
+                            if (actor.IsRecycled)
+                            {
+                                Debug.Log(actor.name + " + + Duplicated Recycle" + "   " + actor.WorldGP);
                             }
 
                             actor.DestroySelfByModuleRecycle();
@@ -389,7 +396,7 @@ public class WorldModule : PoolObject
 
         if (!(this is OpenWorldModule))
         {
-            BattleManager.Instance.OnRecycleWorldModule(GUID); // Open World Module 不回收，长存
+            BattleManager.Instance.OnRecycleWorldModule(WorldModuleData.GUID); // Open World Module 不回收，长存
             World.WorldData.WorldBornPointGroupData_Runtime.UnInit_UnloadModuleData(ModuleGP); // Open World Module 不回收，长存
         }
 
@@ -413,8 +420,8 @@ public class WorldModule : PoolObject
 
     public virtual IEnumerator Initialize(WorldModuleData worldModuleData, GridPos3D moduleGP, World world, int loadEntityNumPerFrame)
     {
+        IsIniting = true;
         IsGeneratingOrRecycling = true;
-        GUID = GetGUID().ToString();
         ModuleGP = moduleGP;
         World = world;
         WorldModuleData = worldModuleData;
@@ -462,7 +469,7 @@ public class WorldModule : PoolObject
                 appear.ClearAndUnRegister();
                 EventTriggerAppearEntityPassiveSkillList.Remove(appear);
             };
-            appear.InitWorldModuleGUID = GUID; // 这里特例处理了这个类型的PassiveSkill，因为它没有依托的Entity，所以无法从Entity中取GUID，只能外界传进去
+            appear.InitWorldModuleGUID = WorldModuleData.GUID; // 这里特例处理了这个类型的PassiveSkill，因为它没有依托的Entity，所以无法从Entity中取GUID，只能外界传进去
             appear.OnRegisterLevelEventID(); // 特例不调用OnInit()
             EventTriggerAppearEntityPassiveSkillList.Add(appear);
         }
@@ -495,7 +502,7 @@ public class WorldModule : PoolObject
 
         foreach (EntityData triggerEntityData in worldModuleData.TriggerEntityDataList)
         {
-            GenerateEntity(triggerEntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false, null);
+            GenerateEntity(triggerEntityData, LocalGPToWorldGP(triggerEntityData.LocalGP), false, true, false);
         }
 
         if (!string.IsNullOrWhiteSpace(worldModuleData.WorldModuleFlowAssetPath))
@@ -510,12 +517,14 @@ public class WorldModule : PoolObject
         }
 
         IsGeneratingOrRecycling = false;
+        IsIniting = false;
     }
 
-    public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false, List<GridPos3D> overrideOccupation = null, string overrideWorldModuleGUID = "")
+    public Entity GenerateEntity(EntityData entityData, GridPos3D worldGP, bool isTriggerAppear = false, bool isStartedEntities = false, bool findSpaceUpward = false)
     {
         if (entityData == null) return null;
         if (entityData.EntityTypeIndex == 0) return null;
+        if (entityData.InitWorldModuleGUID == "") entityData.InitWorldModuleGUID = WorldModuleData.GUID;
         EntityOccupationData occupationData = ConfigManager.GetEntityOccupationData(entityData.EntityTypeIndex);
         bool isTriggerEntity = occupationData.IsTriggerEntity;
 
@@ -524,7 +533,6 @@ public class WorldModule : PoolObject
 
         {
             // Probability Check
-            if (entityData.RawEntityExtraSerializeData != null)
             {
                 uint probabilityShow = 100;
                 foreach (EntityPassiveSkill eps in entityData.RawEntityExtraSerializeData.EntityPassiveSkills)
@@ -539,10 +547,12 @@ public class WorldModule : PoolObject
                 if (!probabilityShow.ProbabilityBool()) return null;
             }
 
+            // Occupation
             List<GridPos3D> entityOccupation_rotated = null;
-            if (overrideOccupation != null)
+            EntityData frozenActorData = entityData.RawEntityExtraSerializeData.FrozenActorData;
+            if (frozenActorData != null)
             {
-                entityOccupation_rotated = overrideOccupation;
+                entityOccupation_rotated = ConfigManager.GetEntityOccupationData(frozenActorData.EntityTypeIndex).EntityIndicatorGPs_RotatedDict[frozenActorData.EntityOrientation];
             }
             else
             {
@@ -585,7 +595,7 @@ public class WorldModule : PoolObject
                             box.BoxFrozenBoxHelper.FrozenBoxOccupation = entityOccupation_rotated;
                         }
 
-                        box.Setup(entityData, worldGP, overrideWorldModuleGUID != "" ? overrideWorldModuleGUID : GUID); // 覆写优先
+                        box.Setup(entityData, worldGP); // 覆写优先
                         box.Initialize(worldGP, this, 0, !IsAccessible, Box.LerpType.Create, false, !isTriggerAppear && !isStartedEntities); // 如果是TriggerAppear的箱子则不需要检查坠落
 
                         // 到模组处登记
@@ -607,16 +617,7 @@ public class WorldModule : PoolObject
                         bool isPlayer = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex;
                         if (BattleManager.Instance.Player1 != null && isPlayer) return null;
                         Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
-                        GridPos3D.ApplyGridPosToLocalTrans(worldGP, actor.transform, 1);
-                        if (overrideWorldModuleGUID != "")
-                        {
-                            actor.Setup(entityData, worldGP, isPlayer ? "" : overrideWorldModuleGUID); // Player不属于任何一个模组, 覆写优先
-                        }
-                        else
-                        {
-                            actor.Setup(entityData, worldGP, isPlayer ? "" : GUID); // Player不属于任何一个模组
-                        }
-
+                        actor.Setup(entityData, worldGP);
                         if (isStartedEntities) actor.ForbidAction = !BattleManager.Instance.IsStart;
                         BattleManager.Instance.AddActor(this, actor);
 
@@ -669,7 +670,7 @@ public class WorldModule : PoolObject
 
         //EventTriggerAppearEntityPassiveSkillList.Clear();
 
-        foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities)
+        foreach (KeyValuePair<uint, Entity> kv in WorldModuleTriggerEntities_CoreGridInside)
         {
             kv.Value.RecordEntityExtraSerializeData();
         }

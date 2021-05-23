@@ -63,7 +63,7 @@ public class EntitySkillAction_GenerateBox : EntitySkillAction, EntitySkillActio
                 EntityData entityData = new EntityData(boxIndex, (GridPosR.Orientation) Random.Range(0, 4));
                 entityData.WorldGP = gridGP;
                 entityData.LocalGP = localGP;
-                module.GenerateEntity(entityData, gridGP, false, false, false, null);
+                module.GenerateEntity(entityData, gridGP, false, false, false);
             }
         }
     }

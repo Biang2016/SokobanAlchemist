@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BoxFrozenBoxHelper : BoxMonoHelper
 {
+    internal bool InitFrozen = false;
     internal Actor FrozenActor; // EnemyFrozenBox将敌人冻住包裹
 
     internal List<GridPos3D> FrozenBoxOccupation = new List<GridPos3D>();
@@ -20,6 +21,13 @@ public class BoxFrozenBoxHelper : BoxMonoHelper
 
         FrozenBoxIndicators.Clear();
         FrozenBoxOccupation = null;
+        if (FrozenActor != null)
+        {
+            FrozenActor.DestroySelfByModuleRecycle();
+            FrozenActor = null;
+        }
+
+        InitFrozen = false;
     }
 
     public override void OnHelperUsed()
@@ -55,5 +63,25 @@ public class BoxFrozenBoxHelper : BoxMonoHelper
         StaticBoxCollider_OnlyForEnemyFrozenBox.center = (actorWidth - 1) / 2f * Vector3.one;
         DynamicBoxCollider_OnlyForEnemyFrozenBox.center = (actorWidth - 1) / 2f * Vector3.one;
         BoxOnlyDynamicCollider_OnlyForEnemyFrozenBox.center = (actorWidth - 1) / 2f * Vector3.one;
+    }
+
+    public override void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
+    {
+        base.ApplyEntityExtraSerializeData(entityExtraSerializeData);
+        if (((Box) Entity).WorldModule.IsIniting && entityExtraSerializeData.FrozenActorData != null) // 模组初始化时就带有FrozenActorData的话，需要顺带创建FrozenActor出来。其他情况下一般是由Actor创建出FrozenBox
+        {
+            bool generateFrozenActorSuc = WorldManager.Instance.CurrentWorld.GenerateFrozenActor(entityExtraSerializeData.FrozenActorData.Clone(), Entity.WorldGP, (Box) Entity, out Actor frozenActor);
+            if (!generateFrozenActorSuc) Debug.LogError("生成冻结角色失败");
+        }
+    }
+
+    public override void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
+    {
+        base.RecordEntityExtraSerializeData(entityExtraSerializeData);
+        if (FrozenActor != null)
+        {
+            FrozenActor.RecordEntityExtraSerializeData();
+            entityExtraSerializeData.FrozenActorData = FrozenActor.CurrentEntityData.Clone();
+        }
     }
 }

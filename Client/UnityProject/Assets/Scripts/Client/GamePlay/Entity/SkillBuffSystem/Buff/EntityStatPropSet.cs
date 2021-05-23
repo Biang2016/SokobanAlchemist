@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BiangLibrary.GameDataFormat.Grid;
+using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -771,23 +772,6 @@ public class EntityStatPropSet
 
     #endregion
 
-    public void OnRecycled()
-    {
-        foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
-        {
-            kv.Value.OnRecycled();
-        }
-
-        StatDict.Clear();
-        foreach (KeyValuePair<EntityPropertyType, EntityProperty> kv in PropertyDict)
-        {
-            kv.Value.OnRecycled();
-        }
-
-        PropertyDict.Clear();
-        cachedFireSpreadEntitySet.Clear();
-    }
-
     private float abnormalStateAutoTick = 0f;
     private int abnormalStateAutoTickInterval = 1; // 异常状态值每秒降低
 
@@ -873,8 +857,8 @@ public class EntityStatPropSet
         #region 冰冻
 
         FrozenResistance.ApplyDataTo(target.FrozenResistance);
-        FrozenValue.ApplyDataTo(target.FrozenValue);
-        FrozenLevel.ApplyDataTo(target.FrozenLevel);
+        FrozenValue.ApplyDataTo(target.FrozenValue, true);
+        FrozenLevel.ApplyDataTo(target.FrozenLevel, true);
         FrozenDamageDefense.ApplyDataTo(target.FrozenDamageDefense);
         target.FrozenFX.CopyDataFrom(FrozenFX);
 
@@ -883,8 +867,8 @@ public class EntityStatPropSet
         #region 燃烧
 
         FiringResistance.ApplyDataTo(target.FiringResistance);
-        FiringValue.ApplyDataTo(target.FiringValue);
-        FiringLevel.ApplyDataTo(target.FiringLevel);
+        FiringValue.ApplyDataTo(target.FiringValue, true);
+        FiringLevel.ApplyDataTo(target.FiringLevel, true);
         FiringSpreadPercent.ApplyDataTo(target.FiringSpreadPercent);
         FiringDamageDefense.ApplyDataTo(target.FiringDamageDefense);
         target.StartFiringFX.CopyDataFrom(StartFiringFX);
@@ -900,5 +884,50 @@ public class EntityStatPropSet
         ActionPointRecovery.ApplyDataTo(target.ActionPointRecovery);
 
         #endregion
+    }
+
+    public void OnRecycle()
+    {
+        foreach (KeyValuePair<EntityStatType, EntityStat> kv in StatDict)
+        {
+            kv.Value.OnRecycled();
+        }
+
+        StatDict.Clear();
+        foreach (KeyValuePair<EntityPropertyType, EntityProperty> kv in PropertyDict)
+        {
+            kv.Value.OnRecycled();
+        }
+
+        PropertyDict.Clear();
+        cachedFireSpreadEntitySet.Clear();
+    }
+
+    public void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
+    {
+        if (entityExtraSerializeData.EntityDataExtraStates.R_HealthDurability) HealthDurability.SetValue(entityExtraSerializeData.EntityDataExtraStates.HealthDurability);
+        if (entityExtraSerializeData.EntityDataExtraStates.R_FiringValue) FiringValue.SetValue(entityExtraSerializeData.EntityDataExtraStates.FiringValue);
+        if (entityExtraSerializeData.EntityDataExtraStates.R_FrozenValue) FrozenValue.SetValue(entityExtraSerializeData.EntityDataExtraStates.FrozenValue);
+    }
+
+    public void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
+    {
+        if (HealthDurability.Value != HealthDurability.MaxValue)
+        {
+            entityExtraSerializeData.EntityDataExtraStates.R_HealthDurability = true;
+            entityExtraSerializeData.EntityDataExtraStates.HealthDurability = HealthDurability.Value;
+        }
+
+        if (FiringValue.Value != 0)
+        {
+            entityExtraSerializeData.EntityDataExtraStates.R_FiringValue = true;
+            entityExtraSerializeData.EntityDataExtraStates.FiringValue = FiringValue.Value;
+        }
+
+        if (FrozenValue.Value != 0)
+        {
+            entityExtraSerializeData.EntityDataExtraStates.R_FrozenValue = true;
+            entityExtraSerializeData.EntityDataExtraStates.FrozenValue = FrozenValue.Value;
+        }
     }
 }

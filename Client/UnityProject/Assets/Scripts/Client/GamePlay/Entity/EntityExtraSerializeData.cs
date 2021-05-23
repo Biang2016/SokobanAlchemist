@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BiangLibrary.CloneVariant;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 [Serializable]
@@ -15,12 +16,17 @@ public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
 
     public EntityDataExtraStates EntityDataExtraStates = new EntityDataExtraStates();
 
+    [OdinSerialize]
+    [NonSerialized]
+    internal EntityData FrozenActorData;
+
     public EntityExtraSerializeData Clone()
     {
         return new EntityExtraSerializeData
         {
             EntityPassiveSkills = EntityPassiveSkills.Clone<EntityPassiveSkill, EntitySkill>(),
             EntityDataExtraStates = EntityDataExtraStates.Clone(),
+            FrozenActorData = FrozenActorData?.Clone(),
         };
     }
 }
@@ -53,6 +59,19 @@ public class EntityDataExtraStates : IClone<EntityDataExtraStates>
 
     #endregion
 
+    #region ESPS
+
+    public bool R_HealthDurability = false;
+    public int HealthDurability;
+
+    public bool R_FiringValue = false;
+    public int FiringValue;
+
+    public bool R_FrozenValue = false;
+    public int FrozenValue;
+
+    #endregion
+
     public EntityDataExtraStates Clone()
     {
         return new EntityDataExtraStates
@@ -79,6 +98,19 @@ public class EntityDataExtraStates : IClone<EntityDataExtraStates>
 
             R_ModelRotation = R_ModelRotation,
             ModelRotation = ModelRotation,
+
+            #endregion
+
+            #region ESPS
+
+            R_HealthDurability = R_HealthDurability,
+            HealthDurability = HealthDurability,
+
+            R_FiringValue = R_FiringValue,
+            FiringValue = FiringValue,
+
+            R_FrozenValue = R_FrozenValue,
+            FrozenValue = FrozenValue,
 
             #endregion
         };

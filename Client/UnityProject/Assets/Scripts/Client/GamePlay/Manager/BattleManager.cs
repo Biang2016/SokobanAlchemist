@@ -104,14 +104,14 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         if (ActorDict.TryGetValue(actorGUID, out Actor actor))
         {
-            if (WorldModuleActorDict.TryGetValue(actor.InitWorldModuleGUID, out HashSet<uint> dict))
+            if (WorldModuleActorDict.TryGetValue(actor.CurrentEntityData.InitWorldModuleGUID, out HashSet<uint> dict))
             {
                 if (dict.Remove(actorGUID))
                 {
                     if (dict.Count == 0)
                     {
-                        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, $"WorldModule_{actor.InitWorldModuleGUID}_EnemyClear");
-                        WorldModuleActorDict.Remove(actor.InitWorldModuleGUID);
+                        ClientGameManager.Instance.BattleMessenger.Broadcast((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, $"WorldModule_{actor.CurrentEntityData.InitWorldModuleGUID}_EnemyClear");
+                        if (dict.Count == 0) WorldModuleActorDict.Remove(actor.CurrentEntityData.InitWorldModuleGUID); // 再判空集的原因是，EnemyClear的时候也可能又生成了Enemy
                     }
                 }
                 else
@@ -242,8 +242,8 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
     {
         if (MainPlayers[0] != null) return;
         Actor player = GameObjectPoolManager.Instance.ActorDict[ConfigManager.Actor_PlayerIndex].AllocateGameObject<Actor>(ActorContainerRoot);
-        GridPos3D.ApplyGridPosToLocalTrans(bpd.WorldGP, player.transform, 1);
-        player.Setup(new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up), bpd.WorldGP, "");
+        EntityData entityData = new EntityData(ConfigManager.Actor_PlayerIndex, GridPosR.Orientation.Up);
+        player.Setup(entityData, bpd.WorldGP);
         AddActor(null, player);
         PlayerDefaultActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData.Clone();
         PlayerCurrentActorSkillLearningData = player.ActorSkillLearningHelper.ActorSkillLearningData;
@@ -260,7 +260,7 @@ public partial class BattleManager : TSingletonBaseManager<BattleManager>
         else if (actor.ActorCategory == ActorCategory.Creature)
         {
             Enemies.Add(actor);
-            RegisterEnemyToWorldModule(worldModule.GUID, actor.GUID);
+            RegisterEnemyToWorldModule(worldModule.WorldModuleData.GUID, actor.GUID);
             RegisterEnemyToStaticLayout(actor.CurrentEntityData.InitStaticLayoutGUID, actor.GUID);
         }
 

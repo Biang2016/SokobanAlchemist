@@ -68,20 +68,20 @@ public class DoorBoxHelper : BoxMonoHelper
         playSound = true;
     }
 
-    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        Entity.CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.R_DoorOpen = true;
-        Entity.CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates.DoorOpen = Open;
+        base.RecordEntityExtraSerializeData(entityExtraSerializeData);
+        entityExtraSerializeData.EntityDataExtraStates.R_DoorOpen = true;
+        entityExtraSerializeData.EntityDataExtraStates.DoorOpen = Open;
     }
 
-    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
-        if (entityDataExtraStates.R_DoorOpen)
+        base.ApplyEntityExtraSerializeData(entityExtraSerializeData);
+        if (entityExtraSerializeData.EntityDataExtraStates.R_DoorOpen)
         {
             playSound = false;
-            Open = entityDataExtraStates.DoorOpen;
+            Open = entityExtraSerializeData.EntityDataExtraStates.DoorOpen;
             playSound = true;
         }
     }

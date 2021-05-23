@@ -32,40 +32,9 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
         LearnSkillUpgradePage,
     }
 
-    public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>
-    {
-        {PrefabNames.InGameHealthBar, 20},
-        {PrefabNames.BoxIndicator, 20},
-        {PrefabNames.WorldModule, 16},
-        {PrefabNames.World, 1},
-        {PrefabNames.OpenWorldModule, 1},
-        {PrefabNames.OpenWorld, 1},
-        {PrefabNames.WorldZoneTrigger, 16},
-        {PrefabNames.WorldDeadZoneTrigger, 16},
-        {PrefabNames.WorldWallCollider, 16},
-        {PrefabNames.WorldGroundCollider, 16},
-        {PrefabNames.BoxTrail, 128},
-        {PrefabNames.BattleIndicator, 10},
-        {PrefabNames.EntityLightning, 10},
-        {PrefabNames.DiscreteStatPointIndicator, 50},
-        {PrefabNames.MarchingSquareTerrainTile, 2048},
-        {PrefabNames.DebugPanelColumn, 4},
-        {PrefabNames.DebugPanelButton, 4},
-        {PrefabNames.DebugPanelSlider, 4},
-        {PrefabNames.EntitySkillRow, 16},
-        {PrefabNames.LearnSkillUpgradePage, 4},
-    };
+    public Dictionary<ushort, int> WarmUpConfigDict_ushort = new Dictionary<ushort, int>();
 
-    public Dictionary<string, int> WarmUpBoxConfig = new Dictionary<string, int>
-    {
-        {"BrickBox", 500},
-        {"WoodenBox", 500},
-        {"BorderBox", 100},
-    };
-
-    public Dictionary<PrefabNames, int> PoolWarmUpDict = new Dictionary<PrefabNames, int>
-    {
-    };
+    public Dictionary<PrefabNames, int> PoolConfigs = new Dictionary<PrefabNames, int>();
 
     public Dictionary<PrefabNames, GameObjectPool> PoolDict = new Dictionary<PrefabNames, GameObjectPool>();
     public Dictionary<ushort, GameObjectPool> BoxDict = new Dictionary<ushort, GameObjectPool>();
@@ -89,18 +58,19 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
     public override void Awake()
     {
         IsInit = true;
-        foreach (KeyValuePair<PrefabNames, int> kv in PoolConfigs)
+        foreach (PrefabNames prefabName in Enum.GetValues(typeof(PrefabNames)))
         {
-            string prefabName = kv.Key.ToString();
-            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabName);
+            string prefabNameStr = prefabName.ToString();
+            GameObject go_Prefab = PrefabManager.Instance.GetPrefab(prefabNameStr);
             if (go_Prefab)
             {
                 GameObject go = new GameObject("Pool_" + prefabName);
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
-                PoolDict.Add(kv.Key, pool);
+                PoolDict.Add(prefabName, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, kv.Value);
+                pool.Initiate(po, po.WarmUpInstanceNum);
+                PoolConfigs.Add(prefabName, po.WarmUpInstanceNum);
             }
         }
 
@@ -114,18 +84,9 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 GameObjectPool pool = go.AddComponent<GameObjectPool>();
                 pool.transform.SetParent(Root);
                 BoxDict.Add(kv.Key, pool);
-                Box box = go_Prefab.GetComponent<Box>();
-                int warmUpNum = 0;
-                if (WarmUpBoxConfig.ContainsKey(kv.Value))
-                {
-                    warmUpNum = WarmUpBoxConfig[kv.Value];
-                }
-                else
-                {
-                    warmUpNum = 20;
-                }
-
-                pool.Initiate(box, warmUpNum);
+                PoolObject po = go_Prefab.GetComponent<PoolObject>();
+                pool.Initiate(po, po.WarmUpInstanceNum);
+                WarmUpConfigDict_ushort.Add(kv.Key, po.WarmUpInstanceNum);
             }
         }
 
@@ -140,7 +101,8 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 ActorDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                pool.Initiate(po, po.WarmUpInstanceNum);
+                WarmUpConfigDict_ushort.Add(kv.Key, po.WarmUpInstanceNum);
             }
         }
 
@@ -155,7 +117,8 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 CollectableItemDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                pool.Initiate(po, po.WarmUpInstanceNum);
+                WarmUpConfigDict_ushort.Add(kv.Key, po.WarmUpInstanceNum);
             }
         }
 
@@ -170,7 +133,8 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 BattleIndicatorDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                pool.Initiate(po, po.WarmUpInstanceNum);
+                WarmUpConfigDict_ushort.Add(kv.Key, po.WarmUpInstanceNum);
             }
         }
 
@@ -185,7 +149,8 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 FXDict.Add(kv.Key, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                pool.Initiate(po, po.WarmUpInstanceNum);
+                WarmUpConfigDict_ushort.Add(kv.Key, po.WarmUpInstanceNum);
             }
         }
 
@@ -200,7 +165,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 MarkerDict.Add(mk_Type, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 100);
+                pool.Initiate(po, po.WarmUpInstanceNum);
             }
         }
 
@@ -215,7 +180,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 ProjectileDict.Add(projectileType, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                pool.Initiate(po, po.WarmUpInstanceNum);
             }
         }
 
@@ -230,7 +195,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
                 pool.transform.SetParent(Root);
                 BattleUIDict.Add(bt_Type, pool);
                 PoolObject po = go_Prefab.GetComponent<PoolObject>();
-                pool.Initiate(po, 20);
+                pool.Initiate(po, po.WarmUpInstanceNum);
             }
         }
 
@@ -241,49 +206,64 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
 
     public IEnumerator WarmUpPool()
     {
-        int GetBoxWarmUpNum(KeyValuePair<ushort, string> kv)
-        {
-            int warmUpNum = 0;
-            if (WarmUpBoxConfig.ContainsKey(kv.Value))
-            {
-                warmUpNum = WarmUpBoxConfig[kv.Value];
-            }
-            else
-            {
-                warmUpNum = 50;
-            }
-
-            return warmUpNum;
-        }
-
         if (alreadyWarmedUp) yield break;
-        int worldModuleWarmUpCount = 20;
-        int boxWarmUpPerFrame = 0;
+        int warmUpPerFrame = 0;
         int totalWarmUpTask = 0;
         int totalWarmUpTaskCount = 0;
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict)
+        foreach (KeyValuePair<PrefabNames, GameObjectPool> kv in PoolDict) totalWarmUpTask += PoolConfigs[kv.Key] * 2;
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in BoxDict) totalWarmUpTask += WarmUpConfigDict_ushort[kv.Key] * 2;
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in ActorDict) totalWarmUpTask += WarmUpConfigDict_ushort[kv.Key] * 2;
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in CollectableItemDict) totalWarmUpTask += WarmUpConfigDict_ushort[kv.Key] * 2;
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in FXDict) totalWarmUpTask += WarmUpConfigDict_ushort[kv.Key] * 2;
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in BattleIndicatorDict) totalWarmUpTask += WarmUpConfigDict_ushort[kv.Key] * 2;
+
+        foreach (KeyValuePair<PrefabNames, GameObjectPool> kv in PoolDict)
         {
-            totalWarmUpTask += GetBoxWarmUpNum(kv) * 2;
+            int warmUpNum = PoolConfigs[kv.Key];
+            PoolObject[] warmUpPoolObjects = new PoolObject[warmUpNum];
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                PoolObject warmUpPoolObject = kv.Value.AllocateGameObject<PoolObject>(null);
+                warmUpPoolObjects[i] = warmUpPoolObject;
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                warmUpPoolObjects[i].PoolRecycle();
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
         }
 
-        totalWarmUpTask += worldModuleWarmUpCount * 2;
-
-        foreach (KeyValuePair<ushort, string> kv in ConfigManager.TypeDefineConfigs[TypeDefineType.Box].TypeNameDict)
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in BoxDict)
         {
-            GameObjectPool pool = BoxDict[kv.Key];
-            int warmUpNum = GetBoxWarmUpNum(kv);
+            int warmUpNum = WarmUpConfigDict_ushort[kv.Key];
             Box[] warmUpBoxes = new Box[warmUpNum];
             for (int i = 0; i < warmUpNum; i++)
             {
-                Box warmUpBox = pool.AllocateGameObject<Box>(null);
+                Box warmUpBox = kv.Value.AllocateGameObject<Box>(null);
                 warmUpBoxes[i] = warmUpBox;
                 warmUpBox.BoxColliderHelper.OnHelperRecycled(); // 防止Collider过多重叠
                 warmUpBox.EntityIndicatorHelper.OnHelperRecycled(); // 防止Collider过多重叠
-                boxWarmUpPerFrame++;
+                warmUpPerFrame++;
                 totalWarmUpTaskCount++;
-                if (boxWarmUpPerFrame > 256)
+                if (warmUpPerFrame > 256)
                 {
-                    boxWarmUpPerFrame = 0;
+                    warmUpPerFrame = 0;
                     ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
                     yield return null;
                 }
@@ -292,32 +272,149 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             for (int i = 0; i < warmUpNum; i++)
             {
                 warmUpBoxes[i].PoolRecycle();
-                boxWarmUpPerFrame++;
+                warmUpPerFrame++;
                 totalWarmUpTaskCount++;
-                if (boxWarmUpPerFrame > 256)
+                if (warmUpPerFrame > 256)
                 {
-                    boxWarmUpPerFrame = 0;
+                    warmUpPerFrame = 0;
                     ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
                     yield return null;
                 }
             }
         }
 
-        WorldModule[] worldModule = new WorldModule[worldModuleWarmUpCount];
-        for (int i = 0; i < worldModuleWarmUpCount; i++)
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in ActorDict)
         {
-            GameObjectPool pool = PoolDict[PrefabNames.WorldModule];
-            WorldModule module = pool.AllocateGameObject<WorldModule>(null);
-            worldModule[i] = module;
-            totalWarmUpTaskCount++;
+            int warmUpNum = WarmUpConfigDict_ushort[kv.Key];
+            Actor[] warmUpActors = new Actor[warmUpNum];
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                Actor warmUpActor = kv.Value.AllocateGameObject<Actor>(null);
+                warmUpActors[i] = warmUpActor;
+                foreach (Collider collider in warmUpActor.ActorMoveColliders) // 防止Collider过多重叠
+                {
+                    collider.enabled = false;
+                }
+
+                warmUpActor.EntityIndicatorHelper.OnHelperRecycled(); // 防止Collider过多重叠
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                warmUpActors[i].PoolRecycle();
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
         }
 
-        ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
-        yield return null;
-        for (int i = 0; i < worldModuleWarmUpCount; i++)
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in CollectableItemDict)
         {
-            worldModule[i].PoolRecycle();
-            totalWarmUpTaskCount++;
+            int warmUpNum = WarmUpConfigDict_ushort[kv.Key];
+            CollectableItem[] warmUpCollectableItems = new CollectableItem[warmUpNum];
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                CollectableItem warmUpCollectableItem = kv.Value.AllocateGameObject<CollectableItem>(null);
+                warmUpCollectableItems[i] = warmUpCollectableItem;
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                warmUpCollectableItems[i].PoolRecycle();
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+        }
+
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in FXDict)
+        {
+            int warmUpNum = WarmUpConfigDict_ushort[kv.Key];
+            FX[] warmUpFXs = new FX[warmUpNum];
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                FX warmUpFX = kv.Value.AllocateGameObject<FX>(null);
+                warmUpFXs[i] = warmUpFX;
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                warmUpFXs[i].PoolRecycle();
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+        }
+
+        foreach (KeyValuePair<ushort, GameObjectPool> kv in BattleIndicatorDict)
+        {
+            int warmUpNum = WarmUpConfigDict_ushort[kv.Key];
+            BattleIndicator[] warmUpBattleIndicators = new BattleIndicator[warmUpNum];
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                BattleIndicator warmUpBattleIndicator = kv.Value.AllocateGameObject<BattleIndicator>(null);
+                warmUpBattleIndicators[i] = warmUpBattleIndicator;
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
+
+            for (int i = 0; i < warmUpNum; i++)
+            {
+                warmUpBattleIndicators[i].PoolRecycle();
+                warmUpPerFrame++;
+                totalWarmUpTaskCount++;
+                if (warmUpPerFrame > 256)
+                {
+                    warmUpPerFrame = 0;
+                    ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");
+                    yield return null;
+                }
+            }
         }
 
         ClientGameManager.Instance.LoadingMapPanel.SetProgress(0.01f + 0.49f * totalWarmUpTaskCount / totalWarmUpTask, "Warm Up Pool");

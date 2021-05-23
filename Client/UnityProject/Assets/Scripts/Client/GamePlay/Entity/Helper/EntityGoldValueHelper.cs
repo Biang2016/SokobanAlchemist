@@ -49,15 +49,15 @@ public class EntityGoldValueHelper : BoxMonoHelper
         }
     }
 
-    public override void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.ApplyEntityExtraStates(entityDataExtraStates);
+        base.ApplyEntityExtraSerializeData(entityExtraSerializeData);
         int baseGoldValue = Entity.EntityStatPropSet.Gold.Value;
         float MinGoldProbability = baseGoldValue * RangeRatioFactor.x;
         float MaxGoldProbability = baseGoldValue * RangeRatioFactor.y;
-        if (entityDataExtraStates.R_GoldValue)
+        if (entityExtraSerializeData.EntityDataExtraStates.R_GoldValue)
         {
-            Entity.EntityStatPropSet.Gold.SetValue(entityDataExtraStates.GoldValue);
+            Entity.EntityStatPropSet.Gold.SetValue(entityExtraSerializeData.EntityDataExtraStates.GoldValue);
             OnChangeGoldValue(Entity.EntityStatPropSet.Gold.Value, MaxGoldProbability);
         }
         else
@@ -73,10 +73,10 @@ public class EntityGoldValueHelper : BoxMonoHelper
         }
     }
 
-    public override void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public override void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
-        base.RecordEntityExtraStates(entityDataExtraStates);
-        entityDataExtraStates.R_GoldValue = true;
-        entityDataExtraStates.GoldValue = Entity.EntityStatPropSet.Gold.Value;
+        base.RecordEntityExtraSerializeData(entityExtraSerializeData);
+        entityExtraSerializeData.EntityDataExtraStates.R_GoldValue = true;
+        entityExtraSerializeData.EntityDataExtraStates.GoldValue = Entity.EntityStatPropSet.Gold.Value;
     }
 }

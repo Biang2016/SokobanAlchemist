@@ -217,11 +217,21 @@ public abstract class Stat
 
     #endregion
 
-    public void ApplyDataTo(Stat target)
+    public void ApplyDataTo(Stat target, bool triggerEvents = false)
     {
-        target._value = _value;
-        target._minValue = _minValue;
-        target._maxValue = _maxValue;
+        if (!triggerEvents)
+        {
+            target._value = _value;
+            target._minValue = _minValue;
+            target._maxValue = _maxValue;
+        }
+        else
+        {
+            target.MinValue = _minValue;
+            target.MaxValue = _maxValue;
+            target.SetValue(_value);
+        }
+
         target.AutoChange = AutoChange;
         target.AutoChangePercent = AutoChangePercent;
         target.AutoChangeTimeInterval = AutoChangeTimeInterval;

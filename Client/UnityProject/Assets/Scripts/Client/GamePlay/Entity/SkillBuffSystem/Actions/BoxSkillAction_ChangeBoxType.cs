@@ -46,7 +46,7 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
             worldGP = targetBox.transform.position.ToGridPos3D();
         }
 
-        string initWorldModuleGUID = targetBox.InitWorldModuleGUID;
+        string initWorldModuleGUID = targetBox.CurrentEntityData.InitWorldModuleGUID;
         string initStaticLayoutGUID = targetBox.CurrentEntityData.InitStaticLayoutGUID;
 
         if (ChangeForEveryGrid)
@@ -60,8 +60,9 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
                 if (module != null)
                 {
                     EntityData entityData = EntityData.Clone();
+                    entityData.InitWorldModuleGUID = initWorldModuleGUID;
                     entityData.InitStaticLayoutGUID = initStaticLayoutGUID;
-                    module.GenerateEntity(entityData, gridWorldGP, overrideWorldModuleGUID: initWorldModuleGUID);
+                    module.GenerateEntity(entityData, gridWorldGP);
                 }
             }
         }
@@ -72,8 +73,9 @@ public class BoxSkillAction_ChangeBoxType : BoxSkillAction, EntitySkillAction.IP
             if (module != null)
             {
                 EntityData entityData = EntityData.Clone();
+                entityData.InitWorldModuleGUID = initWorldModuleGUID;
                 entityData.InitStaticLayoutGUID = initStaticLayoutGUID;
-                module.GenerateEntity(entityData, worldGP, overrideWorldModuleGUID: initWorldModuleGUID);
+                module.GenerateEntity(entityData, worldGP);
             }
         }
     }

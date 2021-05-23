@@ -24,7 +24,7 @@ public abstract class EntitySkillAction : IClone<EntitySkillAction>
     public virtual void Init(Entity entity)
     {
         Entity = entity;
-        InitWorldModuleGUID = entity.InitWorldModuleGUID;
+        InitWorldModuleGUID = entity.CurrentEntityData.InitWorldModuleGUID;
         InitStaticLayoutGUID = entity.CurrentEntityData.InitStaticLayoutGUID;
     }
 

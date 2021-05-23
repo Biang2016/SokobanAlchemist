@@ -94,7 +94,7 @@ public abstract class EntitySkill : IClone<EntitySkill>
 
     public virtual void OnInit()
     {
-        InitWorldModuleGUID = Entity.InitWorldModuleGUID;
+        InitWorldModuleGUID = Entity.CurrentEntityData.InitWorldModuleGUID;
         InitStaticLayoutGUID = Entity.CurrentEntityData.InitStaticLayoutGUID;
     }
 

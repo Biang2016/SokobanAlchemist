@@ -43,11 +43,11 @@ public abstract class EntityMonoHelper : MonoBehaviour
     {
     }
 
-    public virtual void RecordEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public virtual void ApplyEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
     }
 
-    public virtual void ApplyEntityExtraStates(EntityDataExtraStates entityDataExtraStates)
+    public virtual void RecordEntityExtraSerializeData(EntityExtraSerializeData entityExtraSerializeData)
     {
     }
 }

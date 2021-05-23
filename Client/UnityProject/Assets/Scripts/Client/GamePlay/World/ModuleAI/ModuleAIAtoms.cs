@@ -18,17 +18,31 @@ public class ModuleAIAtoms
 
         public override string name => $"{base.name} [{LevelEventAlias.value}]";
 
+        private bool registerEvent = false;
+
         protected override void RegisterPorts()
         {
             OnTriggered = AddFlowOutput("OnTriggered");
             if (ClientGameManager.Instance != null)
             {
                 ClientGameManager.Instance.BattleMessenger.AddListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+                registerEvent = true;
             }
         }
 
         private void OnEvent(string levelEventAlias)
         {
+            if (!graph.isRunning && registerEvent)
+            {
+                if (ClientGameManager.Instance != null)
+                {
+                    ClientGameManager.Instance.BattleMessenger.RemoveListener<string>((uint) ENUM_BattleEvent.Battle_TriggerLevelEventAlias, OnEvent);
+                    registerEvent = false;
+                }
+
+                return;
+            }
+
             if (LevelEventAlias.value.CheckEventAliasOrStateBool(levelEventAlias, WorldModule, null))
             {
                 OnTriggered.Call(new Flow());
@@ -119,7 +133,7 @@ public class ModuleAIAtoms
 
         public override void Invoke()
         {
-            BattleManager.Instance.SetStateBool(WorldModule.GUID, BattleStateAlias.value.FormatEventAliasOrStateBool(WorldModule, null), BattleStateValue.value);
+            BattleManager.Instance.SetStateBool(WorldModule.WorldModuleData.GUID, BattleStateAlias.value.FormatEventAliasOrStateBool(WorldModule, null), BattleStateValue.value);
         }
     }
 

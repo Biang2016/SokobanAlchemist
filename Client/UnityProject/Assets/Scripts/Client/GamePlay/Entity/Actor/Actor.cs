@@ -19,9 +19,9 @@ public class Actor : Entity
 
     protected override void Awake()
     {
+        base.Awake();
         SmoothMoves = GetComponentsInChildren<SmoothMove>().ToList();
         SetModelSmoothMoveLerpTime(0);
-        EntityStatPropSet = new EntityStatPropSet();
     }
 
     public override void OnUsed()
@@ -71,7 +71,7 @@ public class Actor : Entity
 
         UnInitActiveSkills();
         UnInitPassiveSkills();
-        EntityStatPropSet.OnRecycled();
+        EntityStatPropSet.OnRecycle();
 
         foreach (Collider collider in ActorMoveColliders)
         {
@@ -94,10 +94,9 @@ public class Actor : Entity
     /// </summary>
     /// <param name="entityData"></param>
     /// <param name="worldGP"></param>
-    /// <param name="initWorldModuleGUID"></param>
-    public void Setup(EntityData entityData, GridPos3D worldGP, string initWorldModuleGUID)
+    public void Setup(EntityData entityData, GridPos3D worldGP)
     {
-        base.Setup(entityData, initWorldModuleGUID);
+        base.Setup(entityData);
         EntityTypeIndex = entityData.EntityTypeIndex;
         ActorType = entityData.EntityType.TypeName;
         ActorCategory = entityData.EntityTypeIndex == ConfigManager.Actor_PlayerIndex ? ActorCategory.Player : ActorCategory.Creature;
@@ -107,7 +106,8 @@ public class Actor : Entity
         WorldGP = worldGP; // 避免刚Setup就进行占位查询和登记，相关操作WorldModule已经代劳
         LastWorldGP = WorldGP;
         EntityOrientation = entityData.EntityOrientation;
-        GridPosR.ApplyGridPosToLocalTrans(new GridPosR(curWorldGP.x, curWorldGP.z, entityData.EntityOrientation), transform, 1);
+        GridPos3D.ApplyGridPosToLocalTrans(worldGP, transform, 1);
+        transform.localRotation = Quaternion.Euler(0, (int) entityData.EntityOrientation * 90f, 0);
 
         RawEntityStatPropSet.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
@@ -312,6 +312,13 @@ public class Actor : Entity
         get { return curWorldGP; }
         set
         {
+            if (IsDestroying) return; // 死亡过程中不发生变化，以免在模组中反注册出现混乱，使中心格偏移到其他模组中
+            if (IsRecycling)
+            {
+                curWorldGP = value;
+                return;
+            }
+
             if (curWorldGP != value)
             {
                 if (!IsFrozen && !IsTriggerEntity)
@@ -323,7 +330,7 @@ public class Actor : Entity
                         if (targetGridModule == null) return; // 防止角色走入空模组
                         if (targetGridEntity != null)
                         {
-                            // 检查改对象是否真的占据这几格，否则是bug
+                            // 检查该占位对象是否真的占据这几格，否则是bug
                             bool correctOccupation = false;
                             if (targetGridEntity.IsNotNullAndAlive())
                             {
@@ -345,7 +352,8 @@ public class Actor : Entity
                             if (correctOccupation) return; // 防止角色和其他Entity卡住
                             else
                             {
-                                targetGridModule[TypeDefineType.Actor, localGP, false, false, IsTriggerEntity, GUID] = null; // todo 执行到这里说明是bug，先这样处理，以后再研究
+                                Debug.LogError($"{targetGridEntity} Entity对象占位异常 当前检查位置{value}  实际位置{targetGridEntity.WorldGP}");
+                                targetGridModule[TypeDefineType.Actor, localGP, false, false, IsTriggerEntity, GUID] = null; 
                             }
                         }
                     }
@@ -397,7 +405,10 @@ public class Actor : Entity
             if (currentGridModule != null)
             {
                 GridPos3D currentGridLocalGP = currentGridModule.WorldGPToLocalGP(gridPos);
-                currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] = null;
+                if (currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] == this)
+                {
+                    currentGridModule[TypeDefineType.Actor, currentGridLocalGP, false, false, IsTriggerEntity, GUID] = null;
+                }
             }
         }
     }
@@ -653,8 +664,10 @@ public class Actor : Entity
         SetModelSmoothMoveLerpTime(lerpTime);
         transform.position = worldGP;
         LastWorldGP = WorldGP;
+        if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
         curWorldGP = worldGP; // 强行移动
         WorldGP = worldGP;
+        if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
         SetModelSmoothMoveLerpTime(DefaultSmoothMoveLerpTime);
     }
 
@@ -870,7 +883,7 @@ public class Actor : Entity
         int ice = EntityStatPropSet.IceElementFragment.Value;
         int lightning = EntityStatPropSet.LightningElementFragment.Value;
 
-        EntityStatPropSet.OnRecycled();
+        EntityStatPropSet.OnRecycle();
         srcESPS.ApplyDataTo(EntityStatPropSet);
         EntityStatPropSet.Initialize(this);
         ActorBattleHelper.InGameHealthBar.Initialize(ActorBattleHelper, 100, 30);
@@ -1499,8 +1512,11 @@ public class Actor : Entity
         IsDestroying = false;
     }
 
+    private GridPos3D dieStartGP;
+
     public override void DestroySelf(UnityAction callBack = null)
     {
+        dieStartGP = WorldGP;
         EntityStatPropSet.FrozenValue.SetValue(0);
         EntityCollectHelper?.OnDie(); // 以免自身掉落物又被自身捡走
         if (IsDestroying) return;
@@ -1546,6 +1562,11 @@ public class Actor : Entity
             FXManager.Instance.PlayFX(DieFX, transform.position);
             callBack?.Invoke();
             PoolRecycle();
+        }
+
+        if (dieStartGP != WorldGP)
+        {
+            Debug.LogError($"{name} DieGP 不相等 --- Start {dieStartGP} End {WorldGP}");
         }
 
         IsDestroying = false;

@@ -127,7 +127,7 @@ public static class ClientUtils
         }
         else
         {
-            return waiting.CheckEventAliasOrStateBool(incoming, waitingWorldModule.GUID, waitingStaticLayoutGUID);
+            return waiting.CheckEventAliasOrStateBool(incoming, waitingWorldModule.WorldModuleData.GUID, waitingStaticLayoutGUID);
         }
     }
 
@@ -146,7 +146,7 @@ public static class ClientUtils
         }
         else
         {
-            return sending.FormatEventAliasOrStateBool(waitingWorldModule.GUID, waitingStaticLayoutGUID);
+            return sending.FormatEventAliasOrStateBool(waitingWorldModule.WorldModuleData.GUID, waitingStaticLayoutGUID);
         }
     }
 }

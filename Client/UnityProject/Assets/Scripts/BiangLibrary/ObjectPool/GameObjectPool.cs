@@ -28,7 +28,15 @@ namespace BiangLibrary.ObjectPool
 
         public void Initiate(PoolObject prefab, int initialCapacity)
         {
-            InitialCapacity = initialCapacity;
+            if (initialCapacity > 0)
+            {
+                InitialCapacity = initialCapacity;
+            }
+            else
+            {
+                InitialCapacity = 8;
+            }
+
             if (prefab != null)
             {
                 transform.position = GameObjectPoolPosition;
@@ -36,11 +44,11 @@ namespace BiangLibrary.ObjectPool
                 gameObjectDefaultPosition = gameObjectPrefab.transform.position;
                 gameObjectDefaultRotation = gameObjectPrefab.transform.rotation;
                 gameObjectDefaultScale = gameObjectPrefab.transform.localScale;
-                gameObjectPool = new PoolObject[initialCapacity];
-                isUsed = new bool[initialCapacity];
-                isEmpty = new bool[initialCapacity];
-                for (int i = 0; i < initialCapacity; i++) isEmpty[i] = true;
-                capacity = initialCapacity;
+                gameObjectPool = new PoolObject[InitialCapacity];
+                isUsed = new bool[InitialCapacity];
+                isEmpty = new bool[InitialCapacity];
+                for (int i = 0; i < InitialCapacity; i++) isEmpty[i] = true;
+                capacity = InitialCapacity;
                 empty = capacity;
             }
             else

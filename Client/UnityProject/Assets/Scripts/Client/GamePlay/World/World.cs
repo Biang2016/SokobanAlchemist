@@ -660,7 +660,7 @@ public class World : PoolObject
 
         boxes_moveable.Add(box_src);
 
-        // 将可移动箱子的上表面放置的TriggerBox也一起移动
+        // 将可移动箱子的上表面放置的Box也一起移动
         if (module_src.IsNotNullAndAvailable())
         {
             foreach (GridPos3D offset in box_src.GetEntityOccupationGPs_Rotated())
@@ -669,7 +669,7 @@ public class World : PoolObject
                 GridPos3D gridGP_above = gridGP + GridPos3D.Up;
                 Box box_above = GetBoxByGridPosition(gridGP_above, 0, out WorldModule module_after, out GridPos3D localGP_after);
                 if (box_above == box_src) continue;
-                foreach (KeyValuePair<uint, Entity> kv in module_src.WorldModuleTriggerEntities)
+                foreach (KeyValuePair<uint, Entity> kv in module_src.WorldModuleTriggerEntities) // 仅核心格为该坐标的TriggerEntity随之移动，否则还要写MegaBox的支撑判定逻辑，以后再说
                 {
                     if (kv.Value is Box triggerBox && triggerBox.WorldGP == gridGP_above)
                     {
@@ -1200,6 +1200,7 @@ public class World : PoolObject
                 if (triggerEntity == box)
                 {
                     module[TypeDefineType.Box, localGP, false, false, true, box.GUID] = null;
+                    break;
                 }
             }
         }
@@ -1354,18 +1355,17 @@ public class World : PoolObject
         }
     }
 
-    public bool DropBoxOnTopLayer(ushort boxTypeIndex, GridPosR.Orientation boxOrientation, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
+    public bool DropBoxOnTopLayer(EntityData entityData, GridPos3D dir, GridPos3D origin, int maxDistance, out Box dropBox)
     {
         dropBox = null;
-        if (boxTypeIndex == 0) return false;
         if (BoxProject(dir, origin, maxDistance, false, out _, out Box _))
         {
             WorldModule module = GetModuleByWorldGP(origin, true);
             if (module != null)
             {
-                dropBox = GameObjectPoolManager.Instance.BoxDict[boxTypeIndex].AllocateGameObject<Box>(transform);
-                EntityData entityData = new EntityData(boxTypeIndex, boxOrientation);
-                dropBox.Setup(entityData, origin, module.GUID);
+                dropBox = GameObjectPoolManager.Instance.BoxDict[entityData.EntityTypeIndex].AllocateGameObject<Box>(transform);
+                if (entityData.InitWorldModuleGUID == "") entityData.InitWorldModuleGUID = module.WorldModuleData.GUID;
+                dropBox.Setup(entityData, origin);
                 dropBox.Initialize(origin, module, 0, false, Box.LerpType.DropFromAir);
                 dropBox.ApplyEntityExtraSerializeData();
                 dropBox.DropFromAir();
@@ -1376,36 +1376,60 @@ public class World : PoolObject
         return false;
     }
 
-    public bool GenerateEntityOnWorldGPWithoutOccupy(ushort entityTypeIndex, GridPosR.Orientation entityOrientation, GridPos3D origin, out Entity dropEntity, string overrideWorldModuleGUID = "", string overrideStaticLayoutGUID = "")
+    public bool GenerateEntityOnWorldGPWithoutOccupy(EntityData entityData, GridPos3D worldGP, out Entity entity)
     {
-        dropEntity = null;
-        if (entityTypeIndex == 0) return false;
-        WorldModule module = GetModuleByWorldGP(origin, true);
+        entity = null;
+        WorldModule module = GetModuleByWorldGP(worldGP, true);
         if (module != null)
         {
-            ConfigManager.TypeStartIndex tsi = entityTypeIndex.ConvertToTypeStartIndex();
+            ConfigManager.TypeStartIndex tsi = entityData.EntityTypeIndex.ConvertToTypeStartIndex();
             switch (tsi)
             {
                 case ConfigManager.TypeStartIndex.Box:
                 {
-                    dropEntity = GameObjectPoolManager.Instance.BoxDict[entityTypeIndex].AllocateGameObject<Box>(transform);
-                    Box dropBox = (Box) dropEntity;
-                    EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
-                    entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
-                    dropBox.Setup(entityData, origin, overrideWorldModuleGUID != "" ? overrideWorldModuleGUID : module.GUID);
-                    dropBox.Initialize(origin, module, 0, false, Box.LerpType.Create);
-                    dropBox.ApplyEntityExtraSerializeData();
+                    entity = GameObjectPoolManager.Instance.BoxDict[entityData.EntityTypeIndex].AllocateGameObject<Box>(transform);
+                    Box box = (Box) entity;
+                    if (entityData.InitWorldModuleGUID == "") entityData.InitWorldModuleGUID = module.WorldModuleData.GUID;
+                    box.Setup(entityData, worldGP);
+                    box.Initialize(worldGP, module, 0, false, Box.LerpType.Create);
+                    box.ApplyEntityExtraSerializeData();
                     return true;
                 }
                 case ConfigManager.TypeStartIndex.Actor:
                 {
-                    dropEntity = GameObjectPoolManager.Instance.ActorDict[entityTypeIndex].AllocateGameObject<Actor>(transform);
-                    Actor dropActor = (Actor) dropEntity;
-                    EntityData entityData = new EntityData(entityTypeIndex, entityOrientation);
-                    entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
-                    dropActor.Setup(entityData, origin, overrideWorldModuleGUID != "" ? overrideWorldModuleGUID : module.GUID);
-                    dropActor.ForbidAction = !BattleManager.Instance.IsStart;
-                    BattleManager.Instance.AddActor(module, dropActor);
+                    Actor actor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
+                    if (entityData.InitWorldModuleGUID == "") entityData.InitWorldModuleGUID = module.WorldModuleData.GUID;
+                    actor.Setup(entityData, worldGP);
+                    actor.ForbidAction = !BattleManager.Instance.IsStart;
+                    actor.ApplyEntityExtraSerializeData();
+                    BattleManager.Instance.AddActor(module, actor);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool GenerateFrozenActor(EntityData entityData, GridPos3D worldGP, Box frozenBox, out Actor frozenActor)
+    {
+        frozenActor = null;
+        WorldModule module = GetModuleByWorldGP(worldGP, true);
+        if (module != null)
+        {
+            ConfigManager.TypeStartIndex tsi = entityData.EntityTypeIndex.ConvertToTypeStartIndex();
+            switch (tsi)
+            {
+                case ConfigManager.TypeStartIndex.Actor:
+                {
+                    frozenActor = GameObjectPoolManager.Instance.ActorDict[entityData.EntityTypeIndex].AllocateGameObject<Actor>(BattleManager.Instance.ActorContainerRoot);
+                    if (entityData.InitWorldModuleGUID == "") entityData.InitWorldModuleGUID = module.WorldModuleData.GUID;
+                    frozenActor.Setup(entityData, worldGP);
+                    frozenActor.ActorFrozenHelper.FrozenBox = frozenBox;
+                    frozenActor.ForbidAction = !BattleManager.Instance.IsStart;
+                    frozenActor.ApplyEntityExtraSerializeData();
+                    frozenActor.transform.SetParent(frozenBox.transform);
+                    BattleManager.Instance.AddActor(module, frozenActor);
                     return true;
                 }
             }
@@ -1493,7 +1517,7 @@ public class World : PoolObject
                 List<Box> cached_CheckDropAboveList = new List<Box>();
                 foreach (KeyValuePair<uint, Entity> kv in module.WorldModuleTriggerEntities)
                 {
-                    if (kv.Value is Box triggerBox && triggerBox.WorldGP == gridWorldGP)
+                    if (kv.Value is Box triggerBox && triggerBox.WorldGP == gridWorldGP) // 仅核心格为该坐标的TriggerEntity判定坠落，否则还要写MegaBox的支撑判定逻辑，以后再说
                     {
                         if (triggerBox.State == Box.States.Static)
                         {
@@ -1525,7 +1549,10 @@ public class World : PoolObject
 
         foreach (ushort boxTypeIndex in throwBoxIndexList)
         {
-            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4), worldGP, out Entity dropEntity, overrideWorldModuleGUID, overrideStaticLayoutGUID))
+            EntityData entityData = new EntityData(boxTypeIndex, (GridPosR.Orientation) Random.Range(0, 4));
+            if (overrideWorldModuleGUID != "") entityData.InitWorldModuleGUID = overrideWorldModuleGUID;
+            if (overrideStaticLayoutGUID != "") entityData.InitStaticLayoutGUID = overrideStaticLayoutGUID;
+            if (WorldManager.Instance.CurrentWorld.GenerateEntityOnWorldGPWithoutOccupy(entityData, worldGP, out Entity dropEntity))
             {
                 Vector2 horizontalVel = Random.insideUnitCircle.normalized * Mathf.Tan(dropConeAngle * Mathf.Deg2Rad);
                 Vector3 dropVel = Vector3.up + new Vector3(horizontalVel.x, 0, horizontalVel.y);

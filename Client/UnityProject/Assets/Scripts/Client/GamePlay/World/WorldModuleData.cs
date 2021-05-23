@@ -4,10 +4,26 @@ using BiangLibrary.CloneVariant;
 using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.ObjectPool;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldModuleData>
 {
     public static ClassObjectPool<WorldModuleData> WorldModuleDataFactory = new ClassObjectPool<WorldModuleData>(16);
+
+    #region GUID
+
+    [ReadOnly]
+    [HideInEditorMode]
+    public string GUID;
+
+    private static uint guidGenerator = (uint) ConfigManager.GUID_Separator.WorldModule;
+
+    protected uint GetGUID()
+    {
+        return guidGenerator++;
+    }
+
+    #endregion
 
     #region ConfigData
 
@@ -40,7 +56,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
     public BornPointGroupData WorldModuleBornPointGroupData = new BornPointGroupData();
 
     [NonSerialized]
-    public Dictionary<uint, EntityData> TriggerEntityDataDict = new Dictionary<uint, EntityData>();
+    public Dictionary<uint, EntityData> TriggerEntityDataDict = new Dictionary<uint, EntityData>(); // 只记录核心格在此模组内的TriggerEntityData
 
     public List<EntityData> TriggerEntityDataList = new List<EntityData>();
 
@@ -85,6 +101,7 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
         WorldModuleData data = WorldModuleDataFactory.Alloc();
         data.InitNormalModuleData(); // 这里有内存分配
         data.WorldModuleTypeIndex = WorldModuleTypeIndex;
+        data.WorldModuleTypeIndex = WorldModuleTypeIndex;
         data.WorldModuleTypeName = WorldModuleTypeName;
         data.WorldModuleFlowAssetPath = WorldModuleFlowAssetPath;
         data.WorldModuleFeature = WorldModuleFeature;
@@ -116,11 +133,13 @@ public class WorldModuleData : IClone<WorldModuleData>, IClassPoolObject<WorldMo
 
     public void OnUsed()
     {
+        GUID = GetGUID().ToString();
         WorldModuleBornPointGroupData = new BornPointGroupData();
     }
 
     public void OnRelease()
     {
+        GUID = "";
         WorldModuleFeature = WorldModuleFeature.None;
         for (int x = 0; x < WorldModule.MODULE_SIZE; x++)
         {

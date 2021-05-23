@@ -32,14 +32,11 @@ public abstract class Entity : PoolObject
         return guidGenerator++;
     }
 
-    [ReadOnly]
-    [HideInEditorMode]
-    public string InitWorldModuleGUID; // 创建时所属的世界模组GUID
-
     #endregion
 
     protected virtual void Awake()
     {
+        EntityStatPropSet = new EntityStatPropSet();
     }
 
     public override void OnRecycled()
@@ -47,7 +44,6 @@ public abstract class Entity : PoolObject
         base.OnRecycled();
         StopAllCoroutines();
         CurrentEntityData = null;
-        InitWorldModuleGUID = "";
         destroyBecauseNotInAnyModuleTick = 0;
         cachedRemoveList_EntityPassiveSkill.Clear();
         cachedRemoveList_EntityActiveSkill.Clear();
@@ -61,10 +57,9 @@ public abstract class Entity : PoolObject
         CanBeThreatened = true;
     }
 
-    public void Setup(EntityData entityData, string initWorldModuleGUID)
+    public void Setup(EntityData entityData)
     {
         CurrentEntityData = entityData;
-        InitWorldModuleGUID = initWorldModuleGUID;
         if (GUID == 0)
         {
             GUID = GetGUID();
@@ -489,9 +484,10 @@ public abstract class Entity : PoolObject
             AddNewPassiveSkill(newPS);
         }
 
+        EntityStatPropSet.ApplyEntityExtraSerializeData(CurrentEntityData.RawEntityExtraSerializeData);
         foreach (EntityMonoHelper h in EntityMonoHelpers)
         {
-            h?.ApplyEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+            h?.ApplyEntityExtraSerializeData(CurrentEntityData.RawEntityExtraSerializeData);
         }
 
         Profiler.EndSample();
@@ -500,19 +496,16 @@ public abstract class Entity : PoolObject
     public void RecordEntityExtraSerializeData()
     {
         Profiler.BeginSample("RecordEntityExtraSerializeData");
-        foreach (EntityMonoHelper h in EntityMonoHelpers)
+        if (CurrentEntityData == null)
         {
-            if (CurrentEntityData == null)
+            Debug.Log(name);
+        }
+        else
+        {
+            EntityStatPropSet.RecordEntityExtraSerializeData(CurrentEntityData.RawEntityExtraSerializeData);
+            foreach (EntityMonoHelper h in EntityMonoHelpers)
             {
-                Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData == null");
-            }
-            else if (CurrentEntityData.RawEntityExtraSerializeData == null)
-            {
-                Debug.LogError("RecordEntityExtraSerializeData CurrentEntityData.RawEntityExtraSerializeData == null");
-            }
-            else
-            {
-                h?.RecordEntityExtraStates(CurrentEntityData.RawEntityExtraSerializeData.EntityDataExtraStates);
+                h?.RecordEntityExtraSerializeData(CurrentEntityData.RawEntityExtraSerializeData);
             }
         }
 
@@ -1187,7 +1180,7 @@ public abstract class Entity : PoolObject
                 }
             }
 
-            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_ThrowGoldBoxList, EntityGeometryCenter.ToGridPos3D(), InitWorldModuleGUID, CurrentEntityData.InitStaticLayoutGUID);
+            WorldManager.Instance.CurrentWorld.ThrowBoxFormWorldGP(cached_ThrowGoldBoxList, EntityGeometryCenter.ToGridPos3D(), CurrentEntityData.InitWorldModuleGUID, CurrentEntityData.InitStaticLayoutGUID);
         }
     }
 

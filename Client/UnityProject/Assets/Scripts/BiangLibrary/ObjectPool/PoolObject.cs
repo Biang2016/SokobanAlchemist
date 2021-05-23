@@ -18,6 +18,8 @@ namespace BiangLibrary.ObjectPool
 
         private int usedTimes = 0;
 
+        public int WarmUpInstanceNum = 0;
+
         public void PoolRecycle()
         {
             if (IsRecycled) return;

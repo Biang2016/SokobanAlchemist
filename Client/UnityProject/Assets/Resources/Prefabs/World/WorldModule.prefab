@@ -45,16 +45,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb8d53ea4a04b54394d38161b24c3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolIndex: 0
   IsRecycled: 0
+  WarmUpInstanceNum: 64
+  GUID: 
   World: {fileID: 0}
   ModuleGP:
     x: 0
     y: 0
     z: 0
+  WorldZoneTrigger: {fileID: 0}
   WorldDeadZoneTrigger: {fileID: 0}
   WorldWallCollider: {fileID: 0}
   WorldGroundCollider: {fileID: 0}
+  WorldModuleCollectableItems: []
+  EventTriggerAppearEntityPassiveSkillList: []
   FlowScriptController: {fileID: 2899661921992902562}
+  IsGeneratingOrRecycling: 0
+  references:
+    version: 1
 --- !u!114 &2899661921992902562
 MonoBehaviour:
   m_ObjectHideFlags: 0
