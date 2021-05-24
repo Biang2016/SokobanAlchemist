@@ -399,16 +399,23 @@ public class OpenWorld : World
     private LevelCacheData m_LevelCacheData;
 
     private Coroutine RefreshScopeModulesCoroutine;
+    private float RefreshInterval = 0.3f;
+    private float RefreshIntervalTick = 0.3f;
 
     void FixedUpdate()
     {
         if (!IsRecycled)
         {
-            if (GameStateManager.Instance.GetState() == GameState.Fighting && DungeonMissionState == DungeonMissionState.NotInDungeon)
+            RefreshIntervalTick += Time.fixedDeltaTime;
+            if (RefreshIntervalTick > RefreshInterval)
             {
-                if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartDungeon)
+                RefreshIntervalTick = 0;
+                if (GameStateManager.Instance.GetState() == GameState.Fighting && DungeonMissionState == DungeonMissionState.NotInDungeon)
                 {
-                    RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
+                    if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartDungeon)
+                    {
+                        RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
+                    }
                 }
             }
         }
@@ -623,7 +630,7 @@ public class OpenWorld : World
             m_LevelCacheData.CurrentShowModuleGPs.Remove(hideModuleGP);
         }
 
-        yield return null;
+        yield return null; // 避免每帧都开一个此协程
 
         #endregion
 

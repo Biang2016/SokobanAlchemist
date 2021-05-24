@@ -63,6 +63,7 @@ public class Actor : Entity
         CurThrowPointOffset = Vector3.zero;
         CurForward = Vector3.forward;
         WorldGP = GridPos3D.Zero;
+        // RealtimeWorldGP = GridPos3D.Zero; // WorldGP里面已经重置
         LastWorldGP = GridPos3D.Zero;
         ThrowState = ThrowStates.None;
         ClearJumpParams();
@@ -316,6 +317,7 @@ public class Actor : Entity
             if (IsRecycling)
             {
                 curWorldGP = value;
+                RealtimeWorldGP = value;
                 return;
             }
 
@@ -361,6 +363,7 @@ public class Actor : Entity
 
                 if (!IsFrozen) UnRegisterFromModule(curWorldGP, EntityOrientation);
                 curWorldGP = value;
+                RealtimeWorldGP = value;
                 if (!IsFrozen) RegisterInModule(curWorldGP, EntityOrientation);
             }
         }

@@ -293,6 +293,12 @@ public class ConfigManager : TSingletonBaseManager<ConfigManager>
     #region Export
 
 #if UNITY_EDITOR
+    [MenuItem("开发工具/配置/序列化配置(不Sort)")]
+    public static void ExportConfigs_WithoutSort()
+    {
+        ExportConfigs(true, false);
+    }
+
     [MenuItem("开发工具/配置/序列化配置")]
     public static void ExportConfigs()
     {

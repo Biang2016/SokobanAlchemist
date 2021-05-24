@@ -184,6 +184,7 @@ namespace BiangLibrary.ObjectPool
             gameObjectPool = new_gameObjectPool;
             isUsed = new_isUsed;
             isEmpty = new_isEmpty;
+            //Debug.Log($"GameObjectPool {name} Expand to {capacity}");
         }
     }
 }

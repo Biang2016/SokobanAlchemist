@@ -457,6 +457,7 @@ public partial class Box : Entity
         ArtOnly = artOnly;
         LastInteractEntity = null;
         LastWorldGP = WorldGP;
+        RealtimeWorldGP = worldGP;
         WorldModule = module;
         WorldGP = worldGP;
         LocalGP = module.WorldGPToLocalGP(worldGP);
@@ -905,6 +906,11 @@ public partial class Box : Entity
         if (FaceToCameraForever)
         {
             SwitchEntityOrientation(CameraManager.Instance.FieldCamera.RotateDirection);
+        }
+
+        if (state != States.Static)
+        {
+            RealtimeWorldGP = transform.position.ToGridPos3D();
         }
 
         if ((state == States.BeingKicked || state == States.BeingKickedToGrind) && IsInGridSystem)

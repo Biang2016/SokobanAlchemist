@@ -125,6 +125,7 @@ public abstract class Entity : PoolObject
             //}
         }
 
+        Async_AddRemoveActiveSkill();
         foreach (KeyValuePair<EntitySkillIndex, EntityActiveSkill> kv in EntityActiveSkillDict)
         {
             kv.Value.OnFixedUpdate(Time.fixedDeltaTime);
@@ -135,7 +136,6 @@ public abstract class Entity : PoolObject
     {
         if (!BattleManager.Instance.IsStart) return;
         if (IsRecycled) return;
-        Async_TickAddRemoveActiveSkill();
         EntityStatPropSet.Tick(interval);
         EntityBuffHelper.BuffTick(interval);
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
@@ -300,6 +300,28 @@ public abstract class Entity : PoolObject
     [FoldoutGroup("状态")]
     [LabelText("实时世界坐标")]
     private GridPos3D realtimeWorldGP;
+
+    internal GridPos3D RealtimeWorldGP
+    {
+        get { return realtimeWorldGP; }
+        set
+        {
+            if (realtimeWorldGP != value)
+            {
+                realtimeWorldGP = value;
+                if (realtimeWorldGP != GridPos3D.Zero && value != GridPos3D.Zero && !IsRecycled)
+                {
+                    foreach (EntityPassiveSkill eps in EntityPassiveSkills)
+                    {
+                        foreach (GridPos3D offset in GetEntityOccupationGPs_Rotated())
+                        {
+                             eps.OnPassGrid(realtimeWorldGP + offset);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public Vector3 CurForward
     {
@@ -932,7 +954,7 @@ public abstract class Entity : PoolObject
         ActiveSkillMarkAsDestroyed = false;
     }
 
-    private void Async_TickAddRemoveActiveSkill()
+    private void Async_AddRemoveActiveSkill()
     {
         foreach (EntityPassiveSkill eps in EntityPassiveSkills)
         {

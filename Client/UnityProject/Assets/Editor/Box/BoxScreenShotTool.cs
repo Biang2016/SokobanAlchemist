@@ -39,7 +39,7 @@ public class BoxScreenShotTool : Editor
     [MenuItem("开发工具/Box拍照工具")]
     public static void CaptureScreen()
     {
-        ConfigManager.ExportConfigs(false);
+        ConfigManager.ExportConfigs(false, false);
         float defaultVerticalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.VerAngle;
         float defaultHorizontalAngle = CameraManager.Instance.FieldCamera.TargetConfigData.HorAngle;
         float defaultFOV = CameraManager.Instance.FieldCamera.TargetConfigData.FOV;
