@@ -406,10 +406,11 @@ public class OpenWorld : World
     {
         if (!IsRecycled)
         {
-            RefreshIntervalTick += Time.fixedDeltaTime;
-            if (RefreshIntervalTick > RefreshInterval)
-            {
-                RefreshIntervalTick = 0;
+            // 注释原因：开局角色会掉下去，还没找原因
+            //RefreshIntervalTick += Time.fixedDeltaTime;
+            //if (RefreshIntervalTick > RefreshInterval)
+            //{
+            //    RefreshIntervalTick = 0;
                 if (GameStateManager.Instance.GetState() == GameState.Fighting && DungeonMissionState == DungeonMissionState.NotInDungeon)
                 {
                     if (RefreshScopeModulesCoroutine == null && !WaitingForLoadStartDungeon)
@@ -417,7 +418,7 @@ public class OpenWorld : World
                         RefreshScopeModulesCoroutine = StartCoroutine(RefreshScopeModules(BattleManager.Instance.Player1.WorldGP, PlayerScopeRadiusX, PlayerScopeRadiusZ));
                     }
                 }
-            }
+            //}
         }
         else
         {

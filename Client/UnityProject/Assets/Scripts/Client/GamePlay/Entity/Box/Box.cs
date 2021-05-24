@@ -1010,7 +1010,7 @@ public partial class Box : Entity
         }
         else
         {
-            EntityModelHelper.SetVelocity(0, 0);
+            EntityModelHelper.EndStretch();
         }
 
         if (PassiveSkillMarkAsDestroyed)

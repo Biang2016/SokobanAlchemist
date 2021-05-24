@@ -9,6 +9,12 @@ public class EntityIndicator : PoolObject
 {
     public BoxCollider BoxCollider;
     internal GridPos3D Offset;
+    public GridSnapper GridSnapper;
+
+    void Awake()
+    {
+        GridSnapper.enabled = false;
+    }
 
     public override void OnRecycled()
     {

@@ -32,42 +32,42 @@ public class EntityExtraSerializeData : IClone<EntityExtraSerializeData>
 }
 
 [Serializable]
-public class EntityDataExtraStates : IClone<EntityDataExtraStates>
+public struct EntityDataExtraStates : IClone<EntityDataExtraStates>
 {
-    public bool R_DoorOpen = false;
-    public bool DoorOpen = false;
+    public bool R_DoorOpen;
+    public bool DoorOpen;
 
-    public bool R_TransportBoxClosed = false;
-    public bool TransportBoxClosed = false;
+    public bool R_TransportBoxClosed;
+    public bool TransportBoxClosed;
 
-    public bool R_GoldValue = false;
-    public int GoldValue = 0;
+    public bool R_GoldValue;
+    public int GoldValue;
 
     #region BoxArtHelper
 
-    public bool R_ModelIndex = false;
-    public int ModelIndex = 0;
+    public bool R_ModelIndex;
+    public int ModelIndex;
 
-    public bool R_DecoratorIndex = false;
-    public int DecoratorIndex = 0;
+    public bool R_DecoratorIndex;
+    public int DecoratorIndex;
 
-    public bool R_ModelScale = false;
-    public Vector3 ModelScale = Vector3.one;
+    public bool R_ModelScale;
+    public Vector3 ModelScale;
 
-    public bool R_ModelRotation = false;
-    public Quaternion ModelRotation = Quaternion.identity;
+    public bool R_ModelRotation;
+    public Quaternion ModelRotation;
 
     #endregion
 
     #region ESPS
 
-    public bool R_HealthDurability = false;
+    public bool R_HealthDurability;
     public int HealthDurability;
 
-    public bool R_FiringValue = false;
+    public bool R_FiringValue;
     public int FiringValue;
 
-    public bool R_FrozenValue = false;
+    public bool R_FrozenValue;
     public int FrozenValue;
 
     #endregion

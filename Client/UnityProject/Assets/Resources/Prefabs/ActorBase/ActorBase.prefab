@@ -278,7 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolIndex: 0
   IsRecycled: 0
-  InitWorldModuleGUID: 0
+  WarmUpInstanceNum: 0
   SlowlyTick: 0
   AutoDeleteWhenNotInModule: 1
   CanAutoFallDown: 1
@@ -1362,7 +1362,6 @@ GameObject:
   - component: {fileID: 5266261625142759542}
   - component: {fileID: 1156038876160216290}
   - component: {fileID: 7482838027039899299}
-  - component: {fileID: 3792965728662575922}
   m_Layer: 14
   m_Name: Models
   m_TagString: Untagged
@@ -1409,26 +1408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9378b72790fbf4081e205308fba122, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModelAnim: {fileID: 3792965728662575922}
---- !u!95 &3792965728662575922
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3208937321106435042}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  ModelAnim: {fileID: 0}
 --- !u!1 &3440075569091562444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1839,9 +1819,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers: []
+  GoldRatioMappingCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   RangeRatioFactor: {x: 0.5, y: 1}
   RandomType: 0
   BinaryP: 0.8
+  NoGoldProbability: 0
 --- !u!1 &6087344342592159049
 GameObject:
   m_ObjectHideFlags: 0

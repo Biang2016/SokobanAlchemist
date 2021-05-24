@@ -6,6 +6,8 @@ public class EntityModelHelper : EntityMonoHelper
     [SerializeField]
     internal Animator ModelAnim;
 
+    internal bool StretchAnim = false;
+
     public override void OnHelperRecycled()
     {
         base.OnHelperRecycled();
@@ -14,6 +16,24 @@ public class EntityModelHelper : EntityMonoHelper
     public override void OnHelperUsed()
     {
         base.OnHelperUsed();
+        if (ModelAnim != null)
+        {
+            if (Entity is Actor)
+            {
+                StretchAnim = false;
+                ModelAnim.enabled = false;
+            }
+
+            if (Entity is Box box)
+            {
+                StretchAnim = box.KickOrThrowable;
+                ModelAnim.enabled = StretchAnim;
+            }
+        }
+        else
+        {
+            StretchAnim = false;
+        }
     }
 
     private bool x_Stretch;
@@ -50,6 +70,7 @@ public class EntityModelHelper : EntityMonoHelper
 
     public void SetVelocity(float x, float z)
     {
+        if (!StretchAnim) return;
         if (Entity.EntityOrientation == GridPosR.Orientation.Left || Entity.EntityOrientation == GridPosR.Orientation.Right)
         {
             X_Stretch = z > 0.5f || z < -0.5f;
@@ -60,5 +81,12 @@ public class EntityModelHelper : EntityMonoHelper
             X_Stretch = x > 0.5f || x < -0.5f;
             Z_Stretch = z > 0.5f || z < -0.5f;
         }
+    }
+
+    public void EndStretch()
+    {
+        if (!StretchAnim) return;
+        X_Stretch = false;
+        Z_Stretch = false;
     }
 }

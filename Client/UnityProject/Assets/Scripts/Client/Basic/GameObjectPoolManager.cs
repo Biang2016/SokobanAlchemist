@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using BiangLibrary.GameDataFormat.Grid;
 using BiangLibrary.GamePlay;
 using BiangLibrary.ObjectPool;
 using BiangLibrary.Singleton;
@@ -257,6 +258,7 @@ public class GameObjectPoolManager : TSingletonBaseManager<GameObjectPoolManager
             {
                 Box warmUpBox = kv.Value.AllocateGameObject<Box>(null);
                 warmUpBoxes[i] = warmUpBox;
+                warmUpBox.Setup(new EntityData(kv.Key, GridPosR.Orientation.Up), GridPos3D.Zero);
                 warmUpBox.BoxColliderHelper.OnHelperRecycled(); // 防止Collider过多重叠
                 warmUpBox.EntityIndicatorHelper.OnHelperRecycled(); // 防止Collider过多重叠
                 warmUpPerFrame++;

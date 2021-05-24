@@ -556,7 +556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolIndex: 0
   IsRecycled: 0
-  InitWorldModuleGUID: 0
+  WarmUpInstanceNum: 0
   SlowlyTick: 0
   AutoDeleteWhenNotInModule: 1
   CanAutoFallDown: 1
@@ -1903,6 +1903,7 @@ MonoBehaviour:
   RangeRatioFactor: {x: 0.7, y: 1.3}
   RandomType: 0
   BinaryP: 0.8
+  NoGoldProbability: 0
 --- !u!1 &5923138339813540772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2286,7 +2287,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: c6373188e075691418cfab45dbc73c4e, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0

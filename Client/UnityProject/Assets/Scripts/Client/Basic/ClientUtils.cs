@@ -109,12 +109,8 @@ public static class ClientUtils
     {
         if (string.IsNullOrWhiteSpace(waiting) || string.IsNullOrWhiteSpace(incoming)) return false;
         string formatWaiting = waiting;
-        if (formatWaiting.Contains("{WorldModule}"))
-        {
-            formatWaiting = formatWaiting.Replace("{WorldModule}", waitingWorldModuleGUID.ToString());
-            if (!string.IsNullOrWhiteSpace(waitingStaticLayoutGUID)) formatWaiting = formatWaiting.Replace("{StaticLayout}", waitingStaticLayoutGUID);
-        }
-
+        if (!string.IsNullOrWhiteSpace(waitingWorldModuleGUID)) formatWaiting = formatWaiting.Replace("{WorldModule}", waitingWorldModuleGUID);
+        if (!string.IsNullOrWhiteSpace(waitingStaticLayoutGUID)) formatWaiting = formatWaiting.Replace("{StaticLayout}", waitingStaticLayoutGUID);
         return formatWaiting == incoming;
     }
 
@@ -133,7 +129,8 @@ public static class ClientUtils
 
     public static string FormatEventAliasOrStateBool(this string sending, string waitingWorldModuleGUID, string waitingStaticLayoutGUID)
     {
-        string formatSending = sending.Replace("{WorldModule}", waitingWorldModuleGUID.ToString());
+        string formatSending = sending;
+        if (!string.IsNullOrWhiteSpace(waitingWorldModuleGUID)) formatSending = formatSending.Replace("{WorldModule}", waitingWorldModuleGUID);
         if (!string.IsNullOrWhiteSpace(waitingStaticLayoutGUID)) formatSending = formatSending.Replace("{StaticLayout}", waitingStaticLayoutGUID);
         return formatSending;
     }
