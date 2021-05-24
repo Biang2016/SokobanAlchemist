@@ -356,8 +356,6 @@ public class PlayerControllerHelper : ActorControllerHelper
                 quickMoveAttempt = Vector3.zero;
             }
 
-            Actor.MoveInternal();
-
             #endregion
 
             #region Throw Charging
@@ -438,6 +436,12 @@ public class PlayerControllerHelper : ActorControllerHelper
 
             #endregion
         }
+    }
+
+    public override void OnFixedUpdate()
+    {
+        base.OnFixedUpdate();
+        Actor.MoveInternal();
     }
 
     private Vector3 RotateMoveDirectionByCameraRotation(Vector3 moveDirection)
