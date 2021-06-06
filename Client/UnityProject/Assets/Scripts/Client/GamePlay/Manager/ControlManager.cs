@@ -35,7 +35,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
     #endregion
 
-    private PlayerInput PlayerInput;
+    private PlayerInput PlayerInput_Player;
     private PlayerInput.CommonActions CommonActions;
     private PlayerInput.BattleActions BattleActions;
     private PlayerInput.MenuActions MenuActions;
@@ -276,10 +276,10 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
                 }
             };
 
-        PlayerInput = new PlayerInput();
-        CommonActions = new PlayerInput.CommonActions(PlayerInput);
-        BattleActions = new PlayerInput.BattleActions(PlayerInput);
-        MenuActions = new PlayerInput.MenuActions(PlayerInput);
+        PlayerInput_Player = new PlayerInput();
+        CommonActions = new PlayerInput.CommonActions(PlayerInput_Player);
+        BattleActions = new PlayerInput.BattleActions(PlayerInput_Player);
+        MenuActions = new PlayerInput.MenuActions(PlayerInput_Player);
 
         #region Common
 
@@ -419,7 +419,7 @@ public class ControlManager : TSingletonBaseManager<ControlManager>
 
         #endregion
 
-        PlayerInput.Enable();
+        PlayerInput_Player.Enable();
         CommonActions.Enable();
         BattleActions.Enable();
         MenuActions.Enable();
