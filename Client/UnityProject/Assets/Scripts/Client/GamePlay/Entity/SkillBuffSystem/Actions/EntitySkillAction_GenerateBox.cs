@@ -18,12 +18,13 @@ public class EntitySkillAction_GenerateBox : EntitySkillAction, EntitySkillActio
     [LabelText("箱子堆叠层数")]
     public int GenerateBoxMaxLayer;
 
-    [LabelText("生成延迟")]
-    public float GenerateDelay = 0f;
+    [LabelText("最晚生成延迟")]
+    public float LatestGenerateDelay = 0f;
 
     public override void OnRecycled()
     {
         if (coroutine != null) Entity.StopCoroutine(coroutine);
+        LatestGenerateDelayTick = 0f;
     }
 
     protected override string Description => "生成箱子";
@@ -35,36 +36,45 @@ public class EntitySkillAction_GenerateBox : EntitySkillAction, EntitySkillActio
         coroutine = Entity.StartCoroutine(Co_GenerateBox(worldGP));
     }
 
+    private float LatestGenerateDelayTick = 0f;
     IEnumerator Co_GenerateBox(GridPos3D worldGP)
     {
         for (int i = 0; i < GenerateBoxMaxLayer; i++)
         {
-            yield return new WaitForSeconds(GenerateDelay);
-            GridPos3D gridGP = worldGP + GridPos3D.Up * i;
-            BoxNameWithProbability bp = CommonUtils.GetRandomWithProbabilityFromList(GenerateBoxList);
-            ushort boxIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, bp.BoxTypeName.TypeName);
-            if (boxIndex == 0) continue;
+            while (LatestGenerateDelayTick < LatestGenerateDelay)
+            {
+                LatestGenerateDelayTick += 0.1f;
+                yield return new WaitForSeconds(0.1f);
+                GridPos3D gridGP = worldGP + GridPos3D.Up * i;
+                BoxNameWithProbability bp = CommonUtils.GetRandomWithProbabilityFromList(GenerateBoxList);
+                ushort boxIndex = ConfigManager.GetTypeIndex(TypeDefineType.Box, bp.BoxTypeName.TypeName);
+                if (boxIndex == 0) continue;
 
-            EntityOccupationData entityOccupationData = ConfigManager.GetEntityOccupationData(boxIndex);
-            WorldModule module = null;
-            GridPos3D localGP = GridPos3D.Zero;
-            Entity existedEntity = null;
-            if (entityOccupationData.IsTriggerEntity)
-            {
-                WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridGP, 0, out module, out localGP);
-            }
-            else
-            {
-                existedEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridGP, 0, out module, out localGP);
-            }
+                EntityOccupationData entityOccupationData = ConfigManager.GetEntityOccupationData(boxIndex);
+                WorldModule module = null;
+                GridPos3D localGP = GridPos3D.Zero;
+                Entity existedEntity = null;
+                if (entityOccupationData.IsTriggerEntity)
+                {
+                    WorldManager.Instance.CurrentWorld.GetBoxByGridPosition(gridGP, 0, out module, out localGP);
+                }
+                else
+                {
+                    existedEntity = WorldManager.Instance.CurrentWorld.GetImpassableEntityByGridPosition(gridGP, 0, out module, out localGP);
+                }
 
-            if (module != null && existedEntity == null)
-            {
-                EntityData entityData = new EntityData(boxIndex, (GridPosR.Orientation) Random.Range(0, 4));
-                entityData.WorldGP = gridGP;
-                entityData.LocalGP = localGP;
-                module.GenerateEntity(entityData, gridGP, false, false, false);
+                if (module != null && existedEntity == null)
+                {
+                    EntityData entityData = new EntityData(boxIndex, (GridPosR.Orientation) Random.Range(0, 4));
+                    entityData.WorldGP = gridGP;
+                    entityData.LocalGP = localGP;
+                    module.GenerateEntity(entityData, gridGP, false, false, false);
+                    LatestGenerateDelayTick = 0f;
+                    break;
+                }
             }
+            
+            LatestGenerateDelayTick = 0f;
         }
     }
 
@@ -74,7 +84,7 @@ public class EntitySkillAction_GenerateBox : EntitySkillAction, EntitySkillActio
         EntitySkillAction_GenerateBox action = ((EntitySkillAction_GenerateBox) newAction);
         action.GenerateBoxList = GenerateBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         action.GenerateBoxMaxLayer = GenerateBoxMaxLayer;
-        action.GenerateDelay = GenerateDelay;
+        action.LatestGenerateDelay = LatestGenerateDelay;
     }
 
     public override void CopyDataFrom(EntitySkillAction srcData)
@@ -83,6 +93,6 @@ public class EntitySkillAction_GenerateBox : EntitySkillAction, EntitySkillActio
         EntitySkillAction_GenerateBox action = ((EntitySkillAction_GenerateBox) srcData);
         GenerateBoxList = action.GenerateBoxList.Clone<BoxNameWithProbability, BoxNameWithProbability>();
         GenerateBoxMaxLayer = action.GenerateBoxMaxLayer;
-        GenerateDelay = action.GenerateDelay;
+        LatestGenerateDelay = action.LatestGenerateDelay;
     }
 }

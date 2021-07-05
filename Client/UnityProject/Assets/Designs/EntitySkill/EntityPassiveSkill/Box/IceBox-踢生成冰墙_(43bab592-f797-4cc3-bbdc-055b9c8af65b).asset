@@ -20,12 +20,25 @@ MonoBehaviour:
       type: {class: EntityPassiveSkill_Conditional, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         SkillGUID: (43bab592-f797-4cc3-bbdc-055b9c8af65b)
         SkillAlias: "IceBox-\u8E22\u751F\u6210\u51B0\u5899"
+        SkillName_EN: 
+        SkillName_ZH: 
         SkillIcon:
           TypeDefineType: 0
           TypeGUID: 
-        SkillDescription: 
+        SkillDescription_EN: 
+        SkillDescription_ZH: 
+        PlayerCanLearn: 0
+        GoldCost: 0
+        OccupySkillGrid: 0
+        ShowInSkillPreviewPanel: 0
+        SkillCategoryType: 0
+        SkillRankType: 0
+        SkillScrollType:
+          TypeDefineType: 0
+          TypeGUID: 
         PassiveSkillCondition: 1048576
         TriggerProbabilityPercent: 100
         DestroyEntityByElementDamageTypeList: 
@@ -53,6 +66,7 @@ MonoBehaviour:
       type: {class: EntitySkillAction_GenerateBox, ns: , asm: Client}
       data:
         InitWorldModuleGUID: 0
+        InitStaticLayoutGUID: 
         GenerateBoxList:
         - BoxTypeName:
             TypeDefineType: 0
@@ -61,4 +75,4 @@ MonoBehaviour:
           probability: 1
           isSingleton: 0
         GenerateBoxMaxLayer: 1
-        GenerateDelay: 0.1
+        LatestGenerateDelay: 1
